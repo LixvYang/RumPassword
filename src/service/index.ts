@@ -6,6 +6,11 @@ const rumrequest = new RUMRequest({
   timeout: TIME_OUT,
   interceptors: {
     requestInterceptor: (config) => {
+      const token = ''
+      if (token) {
+        // config.headers.Authorization = `Bearer ${token}`
+      }
+
       console.log('请求拦截')
       return config
     },

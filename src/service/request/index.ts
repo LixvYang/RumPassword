@@ -1,9 +1,11 @@
 import axios, { AxiosInstance } from 'axios'
+import { ElLoading, timelineItemProps } from 'element-plus'
 import { RUMRequestConfig, RUMRequestInterceptors } from './types'
 
 class RUMRequest {
   instance: AxiosInstance
   interceptors?: RUMRequestInterceptors
+  loading?: any
 
   constructor(config: RUMRequestConfig) {
     this.instance = axios.create(config)
@@ -20,6 +22,11 @@ class RUMRequest {
     )
     this.instance.interceptors.request.use(
       (config) => {
+        this.loading = ElLoading.service({
+          lock: true,
+          text: '正在请求数据...',
+          background: 'rgba(0, 0, 0, 0.5)'
+        })
         return config
       },
       (err) => {
@@ -29,9 +36,14 @@ class RUMRequest {
 
     this.instance.interceptors.response.use(
       (res) => {
-        return res
+        this.loading?.close()
+        return res.data
       },
       (err) => {
+        this.loading?.close()
+        if (err.response.status === 404) {
+          console.log('404错误~')
+        }
         return err
       }
     )
