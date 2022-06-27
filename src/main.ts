@@ -11,17 +11,16 @@ app.use(store)
 app.use(globalRegister)
 app.mount('#app')
 
-rumrequest.request({
+interface DataType {
+  data: any
+  returnCode: string
+  success: boolean
+}
+
+rumrequest.get<DataType>({
   url: '/home/multidata',
-  method: 'GET',
-  interceptors: {
-    requestInterceptor: (config) => {
-      console.log('单独请求的config')
-      return config
-    },
-    responseInterceptor: (res) => {
-      console.log('单独响应response')
-      return res
-    }
-  }
+}).then((res) => {
+  console.log(res.data)
+  console.log(res.returnCode)
+  console.log(res.success)
 })
