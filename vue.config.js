@@ -7,7 +7,8 @@ module.exports = {
         components: '@/components'
       }
     }
-  }
+  },
+  lintOnSave: false
   // configureWebpack: (config) => {
   //   config.resolve.alias = {
   //     '@': path.resolve(__dirname, 'src'),
