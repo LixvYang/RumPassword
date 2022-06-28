@@ -24,6 +24,7 @@ class RUMRequest {
       this.interceptors?.responseInterceptor,
       this.interceptors?.responseInterceptorCatch
     )
+
     this.instance.interceptors.request.use(
       (config) => {
         if (this.showLoading) {
@@ -44,7 +45,7 @@ class RUMRequest {
       (res) => {
         setTimeout(() => {
           this.loading?.close()
-        }, 1000);
+        }, 1000)
         return res.data
       },
       (err) => {
@@ -57,44 +58,47 @@ class RUMRequest {
     )
   }
 
-  request<T>(config: RUMRequestConfig): Promise<T> {
+  request<T>(config: RUMRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 1. 单个请求对请求config的处理
-    if (config.interceptors?.requestInterceptor) {
-      config = config.interceptors.requestInterceptor(config)
-    }
-
-    // 2. 判断是否显示loading
-    if (config.showLoading === false) {
-      this.showLoading = config.showLoading
-    }
-
-    this.instance.request<any, T>(config).then((res) => {
-      if (config.interceptors?.responseInterceptor) {
-        // res = config.interceptors.responseInterceptor(res)
+      if (config.interceptors?.requestInterceptor) {
+        config = config.interceptors.requestInterceptor(config)
       }
-      this.showLoading = DEFAULT_LOADING
-      // 3. 将结果返回出去
-      resolve(res)
-    }).catch((err) => {
-      this.showLoading = DEFAULT_LOADING
-      reject(err)
-      return err
-    })
+
+      // 2. 判断是否显示loading
+      if (config.showLoading === false) {
+        this.showLoading = config.showLoading
+      }
+
+      this.instance
+        .request<any, T>(config)
+        .then((res) => {
+          if (config.interceptors?.responseInterceptor) {
+            res = config.interceptors.responseInterceptor(res)
+          }
+          this.showLoading = DEFAULT_LOADING
+          // 3. 将结果返回出去
+          resolve(res)
+        })
+        .catch((err) => {
+          this.showLoading = DEFAULT_LOADING
+          reject(err)
+          return err
+        })
     })
   }
 
-  get<T>(config: RUMRequestConfig): Promise<T> {
-    return this.request<T>({...config, method : 'GET'})
+  get<T>(config: RUMRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET' })
   }
-  post<T>(config: RUMRequestConfig): Promise<T> {
-    return this.request<T>({...config, method : 'POST'})
+  post<T>(config: RUMRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST' })
   }
-  delete<T>(config: RUMRequestConfig): Promise<T> {
-    return this.request<T>({...config, method : 'DELETE'})
+  delete<T>(config: RUMRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE' })
   }
-  patch<T>(config: RUMRequestConfig): Promise<T> {
-    return this.request<T>({...config, method : 'PATCH'})
+  patch<T>(config: RUMRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
 
