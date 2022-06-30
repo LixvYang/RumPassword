@@ -23,7 +23,7 @@
             <span>登录节点</span>
           </span>
         </template>
-        已经拥有节点
+        <node-run />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -31,9 +31,11 @@
 
 <script>
 import NodeCreate from './node-create.vue'
+import NodeRun from './node-run.vue'
 export default {
   components: {
-    NodeCreate
+    NodeCreate,
+    NodeRun
   },
   setup() {
     const tabPosition = 'left'
