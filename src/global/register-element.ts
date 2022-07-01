@@ -1,9 +1,9 @@
 import { App } from 'vue'
 import 'element-plus/theme-chalk/index.css'
 import { ElButton, ElIcon } from 'element-plus/lib/index'
-import { CirclePlus, Folder } from '@element-plus/icons-vue'
+import { CirclePlus, Folder, RefreshRight, Plus, Delete } from '@element-plus/icons-vue'
 const components = [ElButton, ElIcon]
-const Icons = [CirclePlus, Folder]
+const Icons = [CirclePlus, Folder, RefreshRight, Plus, Delete]
 
 export default function (app: App): void {
   for (const icon of Icons) {

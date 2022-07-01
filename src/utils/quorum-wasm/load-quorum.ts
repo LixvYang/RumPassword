@@ -104,7 +104,8 @@ export const qwasm = new Proxy({}, {
 
 export const startQuorum = async (bootstraps: Array<string>) => {
   await qwasm.StartQuorum(
-    '123456',
+    'password',
     bootstraps.join(',')
   );
+  console.log("启动节点成功")
 };

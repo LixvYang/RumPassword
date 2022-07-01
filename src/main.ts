@@ -8,6 +8,7 @@ import './assets/css/index.less'
 import { startQuorum } from './utils/quorum-wasm/load-quorum'
 import {init} from '@/utils/quorum-wasm/worker'
 import rumrequest from './service'
+import add from '@/utils/quorum-wasm/main.js'
 
 const app = createApp(App)
 app.use(router)
@@ -23,11 +24,14 @@ export interface NodeInfo {
   node_version?: string
   peers?: any
 }
-
-init()
+add(1, 2)
+console.log("开启节点前")
+// init()
 async () => {
   await startQuorum(["/ip4/127.0.0.1/tcp/10666/p2p/16Uiu2HAm6xd9nfcmXg37ont8VuG5swRA8vCYv8tXfzcAo7h9djLy"])
+  await console.log("开启节点成功")
 }
+console.log("开启节点后")
 
 
 // rumrequest
