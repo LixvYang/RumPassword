@@ -5,4 +5,7 @@ declare module '*.vue' {
   export default component
 }
 
+declare module '*';
+declare module '*.wasm'
+
 declare let $store: any
