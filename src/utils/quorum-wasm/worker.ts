@@ -1,30 +1,30 @@
-import { Go } from './wasm_exec'
-import quorumWasmUrl from './lib.wasm'
+// import { Go } from './wasm_exec'
+// import quorumWasmUrl from './lib.wasm'
 
-declare global {
-  function KeystoreBackupRaw(...p: Array<any>): Promise<any>;
-  function KeystoreRestoreRaw(...p: Array<any>): Promise<any>;
-  function IsQuorumRunning(...p: Array<any>): Promise<any>;
-}
+// declare global {
+//   function KeystoreBackupRaw(...p: Array<any>): Promise<any>;
+//   function KeystoreRestoreRaw(...p: Array<any>): Promise<any>;
+//   function IsQuorumRunning(...p: Array<any>): Promise<any>;
+// }
 
-export const init = async () => {
-  console.log("开始init")
-  const go = new Go();
-  // if ('instantiateStreaming' in WebAssembly) {
-  console.log("开始导入quorumWasm")
-  WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
-      go.run(result.instance);
-  });
-  console.log("运行成功")
-  // globalThis.postMessage('inited');
-  // } else if ('instantiate' in WebAssembly) {
-  //   const wasm = await fetch("lib.wasm");
-  //   const r = await WebAssembly.instantiate(await wasm.arrayBuffer(), go.importObject);
+// export const init = async () => {
+//   console.log("开始init")
+//   const go = new Go();
+//   // if ('instantiateStreaming' in WebAssembly) {
+//   console.log("开始导入quorumWasm")
+//   WebAssembly.instantiateStreaming(fetch(quorumWasmUrl), go.importObject).then((result) => {
+//       go.run(result.instance);
+//   })
+//   console.log("运行成功")
+//   // globalThis.postMessage('inited');
+//   // } else if ('instantiate' in WebAssembly) {
+//   //   const wasm = await fetch("lib.wasm");
+//   //   const r = await WebAssembly.instantiate(await wasm.arrayBuffer(), go.importObject);
 
-  //   go.run(r.instance);
-  //   globalThis.postMessage('inited');
-  // }
-};
+//   //   go.run(r.instance);
+//   //   globalThis.postMessage('inited');
+//   // }
+// };
 
 // const shim = {
 //   'KeystoreBackupRaw': async (password: string) => {
@@ -78,4 +78,4 @@ export const init = async () => {
 //   }
 // });
 
-init();
+// // init();

@@ -1,4 +1,6 @@
 import { action, observable, when } from 'mobx';
+import { Go } from './wasm_exec';
+import quorumWasmUrl from './lib.wasm'
 
 const wasmworker = !process.env.IS_ELECTRON
   ? new Worker(new URL('./worker.ts', import.meta.url))
@@ -57,6 +59,10 @@ const call = action((method: string, args: Array<any>) => {
   return p;
 });
 
+async function StartQuorum(...p: Array<any>): Promise<any> {
+  console.log(p)
+}
+
 interface QWASM {
   StartQuorum: (...p: Array<any>) => Promise<any>
   StopQuorum: (...p: Array<any>) => Promise<any>
@@ -103,9 +109,16 @@ export const qwasm = new Proxy({}, {
 }) as QWASM;
 
 export const startQuorum = async (bootstraps: Array<string>) => {
-  await qwasm.StartQuorum(
+  console.log("开始startQuorum")
+  const go = new Go();
+  // if ('instantiateStreaming' in WebAssembly) {
+  console.log("开始导入quorumWasm")
+  WebAssembly.instantiateStreaming(fetch(quorumWasmUrl), go.importObject).then((result) => {
+      go.run(result.instance);
+  })
+  await qwasm.StopQuorum(
     'password',
     bootstraps.join(',')
   );
-  console.log("启动节点成功")
+  console.log("startQuorum结束")
 };

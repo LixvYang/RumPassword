@@ -33,7 +33,7 @@
             </el-icon>
           </el-button>
         </el-tooltip>
-        <el-button @click="startQuorum(form.bootstraps)">运行</el-button>
+        <el-button @click="runQuorum">运行</el-button>
         <el-button @click="dialogFormVisible = !dialogFormVisible">确定</el-button>
       </template>
     </el-dialog>
@@ -44,7 +44,9 @@
 import { defineComponent, reactive, ref, watch } from 'vue'
 import BootStrap from './bootstraps/bootstrap.vue'
 import { ElNotification } from 'element-plus'
-import {startQuorum} from '@/utils/quorum-wasm/load-quorum'
+import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
+import localCache from '@/utils/cache/cache'
+import { bootstrapsForm } from '../config/node-config'
 
 export default defineComponent({
   components: {
@@ -52,20 +54,24 @@ export default defineComponent({
   },
   setup() {
     const dialogFormVisible = ref(false)
-    let form = reactive({
-      bootstrap: '',
-      bootstraps: [
-        '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
-        '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
-      ]
-    })
+    let form = reactive(localCache.getCache('boot-strap') ?? bootstrapsForm)
 
     let recoverForm = () => {
-      form.bootstrap = ''
-      form.bootstraps = [
-        '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
-        '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
-      ]
+      if (localCache.getCache('boot-strap')) {
+        localCache.deleteCache('boot-strap')
+      }
+      ;(form.bootstrap = ''),
+        (form.bootstraps = [
+          '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
+          '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
+        ])
+      localCache.setCache('boot-strap', {
+        bootstrap: '',
+        bootstraps: [
+          '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
+          '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
+        ]
+      })
     }
 
     const addBootstrap = () => {
@@ -73,22 +79,35 @@ export default defineComponent({
         form.bootstraps.push(form.bootstrap)
         form.bootstrap = ''
       } else {
+        ElNotification({
+          title: 'Info',
+          message: 'bootstrap不能为空',
+          type: 'info'
+        })
       }
     }
 
     const deleteBootstrap = (index: number) => {
-      form.bootstraps = form.bootstraps.filter((item, i) => {
+      form.bootstraps = form.bootstraps.filter((item: number, i: number) => {
         if (i != index) {
           return item
         }
       })
     }
 
+    const runQuorum = async () => {
+      if (localCache.getCache('boot-strap')) {
+        localCache.deleteCache('boot-strap')
+      }
+      localCache.setCache('boot-strap', form)
+      await startQuorum(bootstrapsForm.bootstraps)
+    }
+
     watch(form, (oldValue, newValue) => {
       if (newValue.bootstraps.length == 0) {
         ElNotification({
           title: 'Info',
-          message: 'bootstrap不能为空',
+          message: 'bootstraps不能为空',
           type: 'info'
         })
       }
@@ -100,7 +119,7 @@ export default defineComponent({
       addBootstrap,
       deleteBootstrap,
       recoverForm,
-      startQuorum
+      runQuorum
     }
   }
 })
