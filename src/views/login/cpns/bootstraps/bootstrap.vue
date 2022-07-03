@@ -1,6 +1,10 @@
 <template>
   <div class="Bootstrap">
-    <tempelete class="item" v-for="(boot, index) in form?.bootstraps" :key="boot.index">
+    <tempelete
+      class="item"
+      v-for="(boot, index) in form?.bootstraps"
+      :key="boot.index"
+    >
       <el-input
         placeholder="端口"
         type="textarea"

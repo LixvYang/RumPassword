@@ -16,19 +16,19 @@ app.use(globalRegister)
 app.mount('#app')
 
 // init()
-// export interface NodeInfo {
-//   node_id?: string
-//   node_publickey?: string
-//   node_status?: string
-//   node_type?: string
-//   node_version?: string
-//   peers?: any
-// }
+export interface NodeInfo {
+  node_id?: string
+  node_publickey?: string
+  node_status?: string
+  node_type?: string
+  node_version?: string
+  peers?: any
+}
 
-// rumrequest
-//   .get<NodeInfo>({
-//     url: '/node'
-//   })
-//   .then((res) => {
-//     console.log(res.peers)
-//   })
+rumrequest
+  .get<NodeInfo>({
+    url: '/node'
+  })
+  .then((res) => {
+    console.log(res.node_id)
+  })

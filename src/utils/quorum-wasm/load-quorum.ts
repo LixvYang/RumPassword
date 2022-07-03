@@ -1,63 +1,69 @@
-import { action, observable, when } from 'mobx';
-import { Go } from './wasm_exec';
+import { action, observable, when } from 'mobx'
+import { Go } from './wasm_exec'
 import quorumWasmUrl from './lib.wasm'
 
 const wasmworker = !process.env.IS_ELECTRON
   ? new Worker(new URL('./worker.ts', import.meta.url))
-  : null;
-const methodCache = new Map<string, any>();
+  : null
+const methodCache = new Map<string, any>()
 
 const state = observable({
   id: 1,
   inited: false,
-  resolveMap: new Map<number, {
-    resolve: (data: unknown) => unknown
-    reject: (err: unknown) => unknown
-  }>(),
-});
+  resolveMap: new Map<
+    number,
+    {
+      resolve: (data: unknown) => unknown
+      reject: (err: unknown) => unknown
+    }
+  >()
+})
 
-export const quorumInited = when(() => state.inited === true);
+export const quorumInited = when(() => state.inited === true)
 
 if (wasmworker) {
-  wasmworker.addEventListener('message', action((e: any) => {
-    if (e.data === 'inited') {
-      state.inited = true;
-    }
-    const data = e.data;
-    const requestId: number = data.id;
-    if (!requestId) {
-      return;
-    }
-    const p = state.resolveMap.get(requestId);
-    state.resolveMap.delete(requestId);
-    if (!p) {
-      return;
-    }
-    if ('data' in data) {
-      p.resolve(data.data);
-    }
-    if ('error' in data) {
-      p.reject(data.data);
-    }
-  }));
+  wasmworker.addEventListener(
+    'message',
+    action((e: any) => {
+      if (e.data === 'inited') {
+        state.inited = true
+      }
+      const data = e.data
+      const requestId: number = data.id
+      if (!requestId) {
+        return
+      }
+      const p = state.resolveMap.get(requestId)
+      state.resolveMap.delete(requestId)
+      if (!p) {
+        return
+      }
+      if ('data' in data) {
+        p.resolve(data.data)
+      }
+      if ('error' in data) {
+        p.reject(data.data)
+      }
+    })
+  )
 }
 
 const call = action((method: string, args: Array<any>) => {
-  const requestId = state.id;
-  state.id += 1;
+  const requestId = state.id
+  state.id += 1
   const p = new Promise((resolve, reject) => {
-    const item = { resolve, reject };
-    state.resolveMap.set(requestId, item);
-  });
+    const item = { resolve, reject }
+    state.resolveMap.set(requestId, item)
+  })
   if (wasmworker) {
     wasmworker.postMessage({
       method,
       args,
-      id: requestId,
-    });
+      id: requestId
+    })
   }
-  return p;
-});
+  return p
+})
 
 async function StartQuorum(...p: Array<any>): Promise<any> {
   console.log(p)
@@ -96,29 +102,31 @@ interface QWASM {
   IsQuorumRunning: (...p: Array<any>) => Promise<any>
 }
 
-export const qwasm = new Proxy({}, {
-  get: (_target, p) => {
-    const methodName = p as string;
-    if (methodCache.has(methodName)) {
-      return methodCache.get(methodName);
+export const qwasm = new Proxy(
+  {},
+  {
+    get: (_target, p) => {
+      const methodName = p as string
+      if (methodCache.has(methodName)) {
+        return methodCache.get(methodName)
+      }
+      const method = (...args: Array<any>) => call(methodName, args)
+      methodCache.set(methodName, method)
+      return method
     }
-    const method = (...args: Array<any>) => call(methodName, args);
-    methodCache.set(methodName, method);
-    return method;
-  },
-}) as QWASM;
+  }
+) as QWASM
 
 export const startQuorum = async (bootstraps: Array<string>) => {
-  console.log("开始startQuorum")
-  const go = new Go();
+  console.log('开始startQuorum')
+  const go = new Go()
   // if ('instantiateStreaming' in WebAssembly) {
-  console.log("开始导入quorumWasm")
-  WebAssembly.instantiateStreaming(fetch(quorumWasmUrl), go.importObject).then((result) => {
-      go.run(result.instance);
-  })
-  await qwasm.StopQuorum(
-    'password',
-    bootstraps.join(',')
-  );
-  console.log("startQuorum结束")
-};
+  console.log('开始导入quorumWasm')
+  WebAssembly.instantiateStreaming(fetch(quorumWasmUrl), go.importObject).then(
+    (result) => {
+      go.run(result.instance)
+    }
+  )
+  await qwasm.StopQuorum('password', bootstraps.join(','))
+  console.log('startQuorum结束')
+}

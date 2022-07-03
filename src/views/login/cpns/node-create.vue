@@ -1,7 +1,9 @@
 <template>
   <div class="node-create">
     <p>第一次使用</p>
-    <el-button @click="dialogFormVisible = true" type="primary">创建节点</el-button>
+    <el-button @click="dialogFormVisible = true" type="primary"
+      >创建节点</el-button
+    >
     <el-dialog
       class="create-dialog"
       v-model="dialogFormVisible"
@@ -11,8 +13,7 @@
     >
       <p>
         请选择一个文件夹来储存节点数据
-        <br />这份数据只是属于你
-        <br />我们不会储存数据，也无法帮你找回
+        <br />这份数据只是属于你 <br />我们不会储存数据，也无法帮你找回
         <br />请务必妥善保管
       </p>
 
@@ -53,7 +54,7 @@ export default defineComponent({
     }
 
     const handleFolderChange = (e: any) => {
-      console.log("传入文件夹")
+      console.log('传入文件夹')
       console.log(e)
     }
 

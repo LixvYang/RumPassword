@@ -1,7 +1,13 @@
 import { App } from 'vue'
 import 'element-plus/theme-chalk/index.css'
 import { ElButton, ElIcon } from 'element-plus/lib/index'
-import { CirclePlus, Folder, RefreshRight, Plus, Delete } from '@element-plus/icons-vue'
+import {
+  CirclePlus,
+  Folder,
+  RefreshRight,
+  Plus,
+  Delete
+} from '@element-plus/icons-vue'
 const components = [ElButton, ElIcon]
 const Icons = [CirclePlus, Folder, RefreshRight, Plus, Delete]
 

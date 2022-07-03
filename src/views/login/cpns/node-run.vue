@@ -33,7 +33,7 @@
             </el-icon>
           </el-button>
         </el-tooltip>
-        <el-button @click="runQuorum">运行</el-button>
+        <el-button @click="loginAction">运行</el-button>
         <el-button @click="dialogFormVisible = !dialogFormVisible">确定</el-button>
       </template>
     </el-dialog>
@@ -42,30 +42,34 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, watch } from 'vue'
+import { useStore } from 'vuex'
 import BootStrap from './bootstraps/bootstrap.vue'
 import { ElNotification } from 'element-plus'
-import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
 import localCache from '@/utils/cache/cache'
-import { bootstrapsForm } from '../config/node-config'
+import { IBootstrap, bootstrapsForm } from '../config/node-config'
 
 export default defineComponent({
   components: {
     BootStrap
   },
   setup() {
-    const dialogFormVisible = ref(false)
-    let form = reactive(localCache.getCache('boot-strap') ?? bootstrapsForm)
+    const store = useStore()
 
-    let recoverForm = () => {
-      if (localCache.getCache('boot-strap')) {
-        localCache.deleteCache('boot-strap')
+    const dialogFormVisible = ref(false)
+    let form: IBootstrap = reactive(
+      localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY') ?? bootstrapsForm
+    )
+
+    const recoverForm = () => {
+      if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
+        localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
       }
-      ;(form.bootstrap = ''),
-        (form.bootstraps = [
-          '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
-          '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
-        ])
-      localCache.setCache('boot-strap', {
+      form.bootstrap = ''
+      form.bootstraps = [
+        '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
+        '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
+      ]
+      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', {
         bootstrap: '',
         bootstraps: [
           '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
@@ -88,19 +92,21 @@ export default defineComponent({
     }
 
     const deleteBootstrap = (index: number) => {
-      form.bootstraps = form.bootstraps.filter((item: number, i: number) => {
+      form.bootstraps = form.bootstraps.filter((item, i) => {
         if (i != index) {
           return item
         }
       })
     }
 
-    const runQuorum = async () => {
-      if (localCache.getCache('boot-strap')) {
-        localCache.deleteCache('boot-strap')
+    const loginAction = () => {
+      if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
+        localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
       }
-      localCache.setCache('boot-strap', form)
-      await startQuorum(bootstrapsForm.bootstraps)
+      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form)
+
+      // 登录验证
+      store.dispatch('login/nodeLoginAction', { ...form.bootstraps })
     }
 
     watch(form, (oldValue, newValue) => {
@@ -119,7 +125,7 @@ export default defineComponent({
       addBootstrap,
       deleteBootstrap,
       recoverForm,
-      runQuorum
+      loginAction
     }
   }
 })
