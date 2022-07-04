@@ -1,1 +1,3 @@
-export interface ILoginState {}
+export interface ILoginState {
+  NodeId: string
+}

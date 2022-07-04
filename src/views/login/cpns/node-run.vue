@@ -47,6 +47,7 @@ import BootStrap from './bootstraps/bootstrap.vue'
 import { ElNotification } from 'element-plus'
 import localCache from '@/utils/cache/cache'
 import { IBootstrap, bootstrapsForm } from '../config/node-config'
+import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
 
 export default defineComponent({
   components: {
@@ -70,7 +71,6 @@ export default defineComponent({
         '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
       ]
       localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', {
-        bootstrap: '',
         bootstraps: [
           '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
           '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
@@ -103,8 +103,11 @@ export default defineComponent({
       if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
         localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
       }
-      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form)
+      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form.bootstraps)
+      startQuorum(form.bootstraps)
+      console.log('startQuorum开始运行')
 
+      console.log('执行starQuorum结束')
       // 登录验证
       store.dispatch('login/nodeLoginAction', { ...form.bootstraps })
     }
