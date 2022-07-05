@@ -16,14 +16,6 @@
         <br />这份数据只是属于你 <br />我们不会储存数据，也无法帮你找回
         <br />请务必妥善保管
       </p>
-
-      <!-- <el-button type="primary" @change="openFolder($event)" round>选择文件夹</el-button> -->
-      <!-- <input type="  file" webkitdirectory name="filename" id="open" style="display:none" /> -->
-      <!-- <el-input placeholder="请输入内容" v-model="form.imgSavePath" class="input-with-select">
-            <el-button slot="append" icon="el-icon-folder" type="success" @click="btnChange"></el-button>
-      </el-input>-->
-      <!-- <input type="file" @change="triggerFile($event)" webkitdirectory directory /> -->
-      <!-- <el-input type="file" webkitdirectory @change="handleFolderChange"></el-input> -->
     </el-dialog>
   </div>
 </template>

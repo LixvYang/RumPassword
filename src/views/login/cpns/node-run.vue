@@ -44,10 +44,9 @@
 import { defineComponent, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import BootStrap from './bootstraps/bootstrap.vue'
-import { ElNotification } from 'element-plus'
+import { ElLoading, ElNotification } from 'element-plus'
 import localCache from '@/utils/cache/cache'
 import { IBootstrap, bootstrapsForm } from '../config/node-config'
-import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
 
 export default defineComponent({
   components: {
@@ -104,12 +103,14 @@ export default defineComponent({
         localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
       }
       localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form.bootstraps)
-      startQuorum(form.bootstraps)
-      console.log('startQuorum开始运行')
 
-      console.log('执行starQuorum结束')
-      // 登录验证
-      store.dispatch('login/nodeLoginAction', { ...form.bootstraps })
+      const loading = ElLoading.service({
+        lock: true,
+        text: '正在请求数据...',
+        background: 'rgba(0, 0, 0, 0.5)'
+      })
+      store.dispatch('login/nodeLoginAction', { ...form })
+      loading.close()
     }
 
     watch(form, (oldValue, newValue) => {

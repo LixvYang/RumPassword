@@ -9,12 +9,14 @@ import './assets/css/index.less'
 import quorumUrl from '@/utils/quorum-wasm/lib.wasm'
 import rumrequest from './service'
 import { bootstrapsForm } from './views/login/config/node-config'
+import { isQuorumRunning } from './utils/quorum-wasm/load-quorum'
 
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(globalRegister)
 app.mount('#app')
+
 
 // init()
 // export interface NodeInfo {

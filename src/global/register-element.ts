@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import 'element-plus/theme-chalk/index.css'
-import { ElButton, ElIcon } from 'element-plus/lib/index'
+import { ElAside, ElButton, ElCol, ElContainer, ElHeader, ElIcon, ElMain, ElMenu, ElMenuItem, ElRow } from 'element-plus/lib/index'
 import {
   CirclePlus,
   Folder,
@@ -8,7 +8,7 @@ import {
   Plus,
   Delete
 } from '@element-plus/icons-vue'
-const components = [ElButton, ElIcon]
+const components = [ElButton, ElIcon, ElContainer, ElAside, ElHeader, ElMain, ElMenu, ElRow, ElCol, ElMenuItem]
 const Icons = [CirclePlus, Folder, RefreshRight, Plus, Delete]
 
 export default function (app: App): void {

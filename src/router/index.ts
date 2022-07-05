@@ -20,4 +20,14 @@ const router = createRouter({
   history: createWebHashHistory()
 })
 
+router.beforeEach((to) => {
+  if (to.path !== '/login') {
+    const groupsInfo = localStorage.getItem('groupsInfo')
+    if (!groupsInfo) {
+      return '/login'
+    }
+  }
+  
+})
+
 export default router

@@ -1,3 +1,6 @@
+import { IGroupsInfo, INodeInfo } from "@/utils/quorum-wasm/types"
+
 export interface ILoginState {
-  NodeId: string
+  nodeInfo: INodeInfo
+  groupsInfo: IGroupsInfo
 }
