@@ -28,13 +28,26 @@ module.exports = {
       })
     ],
     module: {
-      rules: [
-        {
-          test: /\.wasm$/,
-          type: 'webassembly/async'
-        }
-      ]
+      unknownContextCritical: false
+      // rules: [
+      //   {
+      //     test: /\.wasm$/,
+      //     type: 'webassembly/async'
+      //   }
+      // ]
     }
+  },
+  chainWebpack: (config) => {
+    config.module
+      .rule('wasm')
+      .test(/\.(wasm)$/)
+      .type('asset')
+      .parser({
+        dataUrlCondition: {
+          maxSize: 1024
+        }
+      })
+      .end()
   },
   lintOnSave: false
 }

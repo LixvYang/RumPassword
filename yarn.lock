@@ -5849,11 +5849,6 @@
     "pathe" "^0.2.0"
     "pkg-types" "^0.3.2"
 
-"mobx@^6.6.1":
-  "integrity" "sha512-7su3UZv5JF+ohLr2opabjbUAERfXstMY+wiBtey8yNAPoB8H187RaQXuhFjNkH8aE4iHbDWnhDFZw0+5ic4nGQ=="
-  "resolved" "https://registry.npmmirror.com/mobx/-/mobx-6.6.1.tgz"
-  "version" "6.6.1"
-
 "module-alias@^2.2.2":
   "integrity" "sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q=="
   "resolved" "https://registry.npmmirror.com/module-alias/-/module-alias-2.2.2.tgz"

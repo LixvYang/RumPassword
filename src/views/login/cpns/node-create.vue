@@ -1,7 +1,9 @@
 <template>
   <div class="node-create">
     <p>第一次使用</p>
-    <el-button @click="dialogFormVisible = true" type="primary">创建节点</el-button>
+    <el-button @click="dialogFormVisible = true" type="primary"
+      >创建节点</el-button
+    >
     <el-dialog
       class="create-dialog"
       v-model="dialogFormVisible"
@@ -11,18 +13,9 @@
     >
       <p>
         请选择一个文件夹来储存节点数据
-        <br />这份数据只是属于你
-        <br />我们不会储存数据，也无法帮你找回
+        <br />这份数据只是属于你 <br />我们不会储存数据，也无法帮你找回
         <br />请务必妥善保管
       </p>
-
-      <!-- <el-button type="primary" @change="openFolder($event)" round>选择文件夹</el-button> -->
-      <!-- <input type="  file" webkitdirectory name="filename" id="open" style="display:none" /> -->
-      <!-- <el-input placeholder="请输入内容" v-model="form.imgSavePath" class="input-with-select">
-            <el-button slot="append" icon="el-icon-folder" type="success" @click="btnChange"></el-button>
-      </el-input>-->
-      <!-- <input type="file" @change="triggerFile($event)" webkitdirectory directory /> -->
-      <!-- <el-input type="file" webkitdirectory @change="handleFolderChange"></el-input> -->
     </el-dialog>
   </div>
 </template>
@@ -53,7 +46,7 @@ export default defineComponent({
     }
 
     const handleFolderChange = (e: any) => {
-      console.log("传入文件夹")
+      console.log('传入文件夹')
       console.log(e)
     }
 

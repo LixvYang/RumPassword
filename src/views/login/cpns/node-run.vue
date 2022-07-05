@@ -5,76 +5,141 @@
     <el-dialog
       class="create-dialog"
       v-model="dialogFormVisible"
-      title="创建节点"
+      title="Bootstraps"
       draggable
       width="600px"
+      center
     >
-      <el-form :model="form" label-width="120px">
-        <el-form-item label="peername">
-          <el-input v-model="form.peername" />
-        </el-form-item>
-        <el-form-item label="listen">
-          <el-input v-model="form.listen" />
-        </el-form-item>
-        <el-form-item label="apilisten">
-          <el-input v-model="form.apilisten" />
-        </el-form-item>
-        <el-form-item label="peername">
-          <el-input v-model="form.peername" />
-        </el-form-item>
-        <el-form-item label="peer">
-          <el-input v-model="form.peer" />
-        </el-form-item>
-        <el-form-item label="configdir">
-          <el-input v-model="form.configdir" />
-        </el-form-item>
-        <el-form-item label="datadir">
-          <el-input v-model="form.datadir" />
-        </el-form-item>
-        <el-form-item label="keystoredir">
-          <el-input v-model="form.keystoredir" />
-        </el-form-item>
-        <el-form-item label="jsontracer">
-          <el-input v-model="form.jsontracer" />
-        </el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="dialogFormVisible=false">Cancel</el-button>
-      </el-form>
+      <div class="bootstraps">
+        <div>
+          <ul>
+            <boot-strap :form="form" @deleteBootstrap="deleteBootstrap" />
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <el-input type="textarea" v-model="form.bootstrap"></el-input>
+        <el-button @click="addBootstrap" circle>
+          <el-icon color="#529b2e">
+            <Plus />
+          </el-icon>
+        </el-button>
+      </div>
+      <template #footer>
+        <el-tooltip content="恢复默认">
+          <el-button @click="recoverForm" circle>
+            <el-icon color="#409EFF">
+              <RefreshRight />
+            </el-icon>
+          </el-button>
+        </el-tooltip>
+        <el-button @click="loginAction">运行</el-button>
+        <el-button @click="dialogFormVisible = !dialogFormVisible">确定</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, watch } from 'vue'
+import { useStore } from 'vuex'
+import BootStrap from './bootstraps/bootstrap.vue'
+import { ElLoading, ElNotification } from 'element-plus'
+import localCache from '@/utils/cache/cache'
+import { IBootstrap, bootstrapsForm } from '../config/node-config'
 
 export default defineComponent({
+  components: {
+    BootStrap
+  },
   setup() {
+    const store = useStore()
+
     const dialogFormVisible = ref(false)
-    const form = reactive({
-      peername: 'owner',
-      listen: '/ip4/127.0.0.1/tcp/7002',
-      apilisten: ':8002',
-      peer: '/ip4/127.0.0.1/tcp/10666/p2p/16Uiu2HAm6xd9nfcmXg37ont8VuG5swRA8vCYv8tXfzcAo7h9djLy',
-      configdir: 'config',
-      datadir: 'data',
-      keystoredir: 'keystoredir',
-      jsontracer: 'ownertracer.json'
-    })
-    const onSubmit = (e: any) => {
-      console.log(e)
+    let form: IBootstrap = reactive(
+      localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY') ?? bootstrapsForm
+    )
+
+    const recoverForm = () => {
+      if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
+        localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
+      }
+      form.bootstrap = ''
+      form.bootstraps = [
+        '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
+        '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
+      ]
+      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', {
+        bootstraps: [
+          '/ip4/94.23.17.189/tcp/10667/ws/p2p/16Uiu2HAmGTcDnhj3KVQUwVx8SGLyKBXQwfAxNayJdEwfsnUYKK4u',
+          '/ip4/139.155.182.182/tcp/33333/ws/p2p/16Uiu2HAmBUxzcXjCydQTcKgpXvmBZc3paQdTT5j8RXp23M7avi1z'
+        ]
+      })
     }
+
+    const addBootstrap = () => {
+      if (form.bootstrap != '') {
+        form.bootstraps.push(form.bootstrap)
+        form.bootstrap = ''
+      } else {
+        ElNotification({
+          title: 'Info',
+          message: 'bootstrap不能为空',
+          type: 'info'
+        })
+      }
+    }
+
+    const deleteBootstrap = (index: number) => {
+      form.bootstraps = form.bootstraps.filter((item, i) => {
+        if (i != index) {
+          return item
+        }
+      })
+    }
+
+    const loginAction = () => {
+      if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
+        localCache.deleteCache('WASM_BOOTSTRAP_STORAGE_KEY')
+      }
+      localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form.bootstraps)
+
+      const loading = ElLoading.service({
+        lock: true,
+        text: '正在请求数据...',
+        background: 'rgba(0, 0, 0, 0.5)'
+      })
+      store.dispatch('login/nodeLoginAction', { ...form })
+      loading.close()
+    }
+
+    watch(form, (oldValue, newValue) => {
+      if (newValue.bootstraps.length == 0) {
+        ElNotification({
+          title: 'Info',
+          message: 'bootstraps不能为空',
+          type: 'info'
+        })
+      }
+    })
 
     return {
       form,
       dialogFormVisible,
-      onSubmit
+      addBootstrap,
+      deleteBootstrap,
+      recoverForm,
+      loginAction
     }
   }
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .node-run {
   text-align: center;
+  .footer {
+    display: flex;
+  }
 }
 </style>
