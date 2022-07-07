@@ -10,7 +10,10 @@ import {
   ElMain,
   ElMenu,
   ElMenuItem,
-  ElRow
+  ElRow,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu
 } from 'element-plus/lib/index'
 import {
   CirclePlus,
@@ -19,7 +22,8 @@ import {
   Plus,
   Delete,
   DArrowLeft,
-  DArrowRight
+  DArrowRight,
+  ArrowDown
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -33,7 +37,11 @@ const components = [
   ElCol,
   ElMenuItem,
   DArrowLeft,
-  DArrowRight
+  DArrowRight,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ArrowDown
 ]
 const Icons = [CirclePlus, Folder, RefreshRight, Plus, Delete]
 

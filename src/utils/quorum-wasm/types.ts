@@ -57,16 +57,15 @@ export interface Group {
 }
 
 export interface GroupContent {
-  TrxId?:     string;
-  Publisher?: string;
-  Content?:   Content;
-  TypeUrl?:   string;
-  TimeStamp?: number;
+  TrxId?: string
+  Publisher?: string
+  Content?: Content
+  TypeUrl?: string
+  TimeStamp?: number
 }
 
 export interface Content {
-  type?:    string;
-  content?: string;
-  name?:    string;
+  type?: string
+  content?: string
+  name?: string
 }
-

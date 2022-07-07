@@ -1,5 +1,5 @@
-import { GroupContent } from "@/utils/quorum-wasm/types";
-import rumrequest from "..";
+import { GroupContent } from '@/utils/quorum-wasm/types'
+import rumrequest from '..'
 
 export function getGroupContent(group_id: string | undefined) {
   return rumrequest.post<GroupContent>({

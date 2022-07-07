@@ -2,7 +2,10 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <nav-menu :collapse="isCollapse" @reqGroupContent="handlereqGroupContent" />
+        <nav-menu
+          :collapse="isCollapse"
+          @reqGroupContent="handlereqGroupContent"
+        />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
