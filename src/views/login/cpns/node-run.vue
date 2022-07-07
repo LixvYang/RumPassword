@@ -1,6 +1,8 @@
 <template>
   <div class="node-run">
-    <el-button @click="dialogFormVisible = true" type="primary">在浏览器中运行</el-button>
+    <el-button @click="dialogFormVisible = true" type="primary"
+      >在浏览器中运行</el-button
+    >
 
     <el-dialog
       class="create-dialog"
@@ -34,7 +36,9 @@
           </el-button>
         </el-tooltip>
         <el-button @click="loginAction">运行</el-button>
-        <el-button @click="dialogFormVisible = !dialogFormVisible">确定</el-button>
+        <el-button @click="dialogFormVisible = !dialogFormVisible"
+          >确定</el-button
+        >
       </template>
     </el-dialog>
   </div>

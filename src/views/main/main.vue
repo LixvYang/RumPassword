@@ -1,12 +1,12 @@
 <template>
   <div class="main">
     <el-container class="main-content">
-      <el-aside width="200px">
-        <nav-menu />
+      <el-aside :width="isCollapse ? '60px' : '210px'">
+        <nav-menu :collapse="isCollapse" />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
-          <nav-header />
+          <nav-header @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">Main</el-main>
       </el-container>
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
 
@@ -25,7 +25,13 @@ export default defineComponent({
     NavMenu
   },
   setup() {
+    const isCollapse = ref(false)
+    const handleFoldChange = (isFold: boolean) => {
+      isCollapse.value = isFold
+    }
     return {
+      isCollapse,
+      handleFoldChange
     }
   }
 })
@@ -72,7 +78,7 @@ export default defineComponent({
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  background-color: #409EFF;
+  background-color: #409eff;
   transition: width 0.3s linear;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */

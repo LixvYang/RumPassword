@@ -1,10 +1,12 @@
 import { Module } from 'vuex'
 import { ILoginState } from './types'
 import { IRootState } from '../types'
-import { getGroups, getNodeInfo, startQuorum } from '@/utils/quorum-wasm/load-quorum'
+import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
 import { IBootstrap } from '@/views/login/config/node-config'
 import { IGroupsInfo, INodeInfo } from '@/utils/quorum-wasm/types'
 import router from '@/router'
+import { getGroups } from '@/service/groups/getgroups'
+import { getNodeInfo } from '@/service/node/getnodeinfo'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -15,7 +17,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   actions: {
-    async nodeLoginAction({commit}, payload: IBootstrap) {
+    async nodeLoginAction({ commit }, payload: IBootstrap) {
       // 实现登录逻辑
       // 创建节点
       await startQuorum(payload.bootstraps)
@@ -40,9 +42,6 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeGroupsInfo(state, groupsInfo: any) {
       state.groupsInfo = groupsInfo
-
-      console.log('注册groups路由')
-
     }
   },
   getters: {}
