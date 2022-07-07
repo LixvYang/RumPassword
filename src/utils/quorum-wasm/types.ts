@@ -56,3 +56,16 @@ export interface Group {
   snapshot_info?: null
 }
 
+export interface GroupContent {
+  TrxId?: string
+  Publisher?: string
+  Content?: Content
+  TypeUrl?: string
+  TimeStamp?: number
+}
+
+export interface Content {
+  type?: string
+  content?: string
+  name?: string
+}

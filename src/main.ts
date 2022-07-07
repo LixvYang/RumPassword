@@ -5,22 +5,11 @@ import store from './store'
 import { globalRegister } from './global'
 import 'normalize.css'
 import './assets/css/index.less'
+import i18n from './utils/lang'
 
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(globalRegister)
+app.use(i18n)
 app.mount('#app')
-
-// export interface NodeInfo {
-//   node_id?: string
-//   node_publickey?: string
-// }
-
-// rumrequest
-//   .get<NodeInfo>({
-//     url: '/node'
-//   })
-//   .then((res) => {
-//     console.log(res)
-//   })

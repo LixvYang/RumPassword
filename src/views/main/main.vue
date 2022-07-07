@@ -2,7 +2,10 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <nav-menu :collapse="isCollapse" />
+        <nav-menu
+          :collapse="isCollapse"
+          @reqGroupContent="handlereqGroupContent"
+        />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
@@ -18,6 +21,7 @@
 import { defineComponent, ref } from 'vue'
 import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
+import { getGroupContent } from '@/service/content/getcontent'
 
 export default defineComponent({
   components: {
@@ -29,9 +33,17 @@ export default defineComponent({
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }
+
+    const handlereqGroupContent = (group_id: string | undefined) => {
+      console.log(group_id)
+      getGroupContent(group_id).then((res) => {
+        console.log(res)
+      })
+    }
     return {
       isCollapse,
-      handleFoldChange
+      handleFoldChange,
+      handlereqGroupContent
     }
   }
 })

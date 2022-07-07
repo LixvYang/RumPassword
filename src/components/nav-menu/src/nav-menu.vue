@@ -5,9 +5,17 @@
       <span class="title" v-if="!collapse">RumPassword</span>
     </div>
     <el-menu default-active="0" class="el-menu-vertical">
-      <template v-for="(group, index) of groups" :key="group">
-        <el-menu-item :index="index + ''">
+      <template v-for="(group, index) of groups" :key="group" v-if="!collapse">
+        <el-menu-item
+          :index="index + ''"
+          @click="handleMenuItemClick(group.group_id)"
+        >
           <span>{{ group.group_name }}</span>
+        </el-menu-item>
+      </template>
+      <template v-for="(group, index) of groups" :key="group" v-if="collapse">
+        <el-menu-item :index="index + ''">
+          <span>{{ group.group_name?.charAt(0) }}</span>
         </el-menu-item>
       </template>
       <!-- <el-button @click="getGroupsInfo">请求组数据</el-button> -->
@@ -26,7 +34,8 @@ export default defineComponent({
       default: false
     }
   },
-  setup() {
+  emits: ['reqGroupContent'],
+  setup(props, { emit }) {
     const store = useStore()
 
     const groups = computed(() => store.state.login.groupsInfo.groups)
@@ -37,9 +46,14 @@ export default defineComponent({
       }
     }
 
+    const handleMenuItemClick = (group_id: string | undefined) => {
+      emit('reqGroupContent', group_id)
+    }
+
     return {
       getGroupsInfo,
-      groups
+      groups,
+      handleMenuItemClick
     }
   }
 })

@@ -1,11 +1,17 @@
 <template>
   <div class="app">
-    <router-view></router-view>
+    <el-config-provider :locale="locale">
+      <router-view></router-view>
+    </el-config-provider>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import en from 'element-plus/lib/locale/lang/en'
+import { useStore } from './store'
+import { ElConfigProvider } from 'element-plus'
 
 export default defineComponent({
   name: 'App',
@@ -13,6 +19,17 @@ export default defineComponent({
     name: {
       type: String
     }
+  },
+  setup() {
+    const store = useStore()
+    const language = computed(() => store.state.lang.language)
+    const lang = {
+      zhCn,
+      en
+    }
+    const locale = computed(() => lang[language.value as keyof typeof lang])
+
+    return { locale, ElConfigProvider }
   }
 })
 </script>
