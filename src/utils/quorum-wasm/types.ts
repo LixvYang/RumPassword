@@ -1,58 +1,58 @@
 export interface INodeInfo {
-  nodeID?:        string;
-  nodePublickey?: string;
-  nodeStatus?:    string;
-  nodeType?:      string;
-  nodeVersion?:   string;
-  peers?:         any;
+  node_id?: string
+  node_publickey?: string
+  node_status?: string
+  node_type?: string
+  node_version?: string
+  peers?: any
 }
 
 export interface ICreateGroupParams {
-  groupName:      string;
-  consensusType:  string;
-  encryptionType: string;
-  appKey:         string;
+  group_name: string
+  consensus_type: string
+  encryption_type: string
+  app_key: string
 }
 
 export interface ICreateGroupResult {
-  genesisBlock:   GenesisBlock;
-  groupID:        string;
-  groupName:      string;
-  ownerPubkey:    string;
-  consensusType:  string;
-  encryptionType: string;
-  cipherKey:      string;
-  appKey:         string;
-  signature:      string;
+  genesis_block: GenesisBlock
+  group_id: string
+  group_name: string
+  owner_pubkey: string
+  consensus_type: string
+  encryption_type: string
+  cipher_key: string
+  app_key: string
+  signature: string
 }
 
 export interface GenesisBlock {
-  blockID:        string;
-  groupID:        string;
-  producerPubKey: string;
-  hash:           string;
-  signature:      string;
-  timeStamp:      string;
+  BlockId: string
+  GroupId: string
+  ProducerPubKey: string
+  Hash: string
+  Signature: string
+  TimeStamp: string
 }
 
-
 export interface IGroupsInfo {
-  groups?: Group[];
+  groups?: Group[]
 }
 
 export interface Group {
-  groupID?:        string;
-  groupName?:      string;
-  ownerPubkey?:    string;
-  userPubkey?:     string;
-  userEthAddr?:    string;
-  consensusType?:  string;
-  encryptionType?: string;
-  cipherKey?:      string;
-  appKey?:         string;
-  lastUpdated?:    number;
-  highestHeight?:  number;
-  highestBlockID?: string;
-  groupStatus?:    string;
-  snapshotInfo?:   null;
+  group_id?: string
+  group_name?: string
+  owner_pubkey?: string
+  user_pubkey?: string
+  user_eth_addr?: string
+  consensus_type?: string
+  encryption_type?: string
+  cipher_key?: string
+  app_key?: string
+  last_updated?: number
+  highest_height?: number
+  highest_block_id?: string
+  group_status?: string
+  snapshot_info?: null
 }
+

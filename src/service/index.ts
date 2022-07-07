@@ -10,21 +10,15 @@ const rumrequest = new RUMRequest({
       if (token) {
         // config.headers.Authorization = `Bearer ${token}`
       }
-
-      console.log('请求拦截')
       return config
     },
     requestInterceptorCatch: (err) => {
-      console.log('请求失败')
       return err
     },
     responseInterceptor: (config) => {
-      console.log('响应拦截')
-
       return config
     },
     responseInterceptorCatch(err) {
-      console.log('响应失败')
       return err
     }
   }

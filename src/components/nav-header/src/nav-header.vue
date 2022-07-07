@@ -1,53 +1,55 @@
 <template>
   <div class="nav-header">
-    NavHeader
-    <el-button @click="createGroup">创建群组</el-button>
-    <el-button @click="getGroups">得到群组</el-button>
-    <el-button @click="IfQuorumRun">是否运行</el-button>
+    <DArrowLeft v-if="!isFold" class="fold-menu" @click="handleFoldClick"></DArrowLeft>
+    <DArrowRight v-if="isFold" class="fold-menu" @click="handleFoldClick"></DArrowRight>
+
+    <el-button @click="getgroups">请求群组</el-button>
+    <el-button @click="getnodeinfo">请求节点信息</el-button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import {
-  createGroup as createGroupquorum,
-  getGroups as getGroupsquorum
-} from '@/utils/quorum-wasm/load-quorum'
-
-import { ICreateGroupParams } from '@/utils/quorum-wasm/types'
+import { defineComponent, ref } from 'vue'
+import { getGroups } from '@/service/groups/getgroups'
+import { getNodeInfo } from '@/service/node/getnodeinfo'
 
 export default defineComponent({
-  setup() {
-    const createGroup = () => {
-      const params: any = {
-        group_name: 'Lixv的群组',
-        consensus_type: 'poa',
-        encryption_type: 'public',
-        app_key: '123456'
-      }
-      console.log(params)
-      CreateGroup(JSON.stringify(params))
+  emits: ['foldChange'],
+  setup(props, { emit }) {
+    const isFold = ref(false)
+
+    const getgroups = () => {
+      getGroups().then((res) => {
+        console.log(res)
+      })
     }
 
-    CreateGroup({
-      group_name: 'Lixv的群组',
-      consensus_type: 'poa',
-      encryption_type: 'public',
-      app_key: '123456'
-    })
-
-    const getGroups = () => {
-      console.log(getGroupsquorum())
+    const getnodeinfo = () => {
+      getNodeInfo().then((res) => {
+        console.log(res)
+      })
     }
 
-    const IfQuorumRun = () => {
-      console.log(IsQuorumRunning())
+    const handleFoldClick = () => {
+      isFold.value = !isFold.value
+      emit('foldChange', isFold.value)
     }
 
-    return { createGroup, getGroups, IfQuorumRun }
+    return { isFold, handleFoldClick, getgroups, getnodeinfo }
   }
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.nav-header {
+  display: flex;
+  width: 100%;
+  .fold-menu {
+    font-size: 30px;
+    cursor: pointer;
+    width: 1em;
+    height: 1em;
+    margin-right: 8px;
+  }
+}
 </style>

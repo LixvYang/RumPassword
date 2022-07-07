@@ -1,14 +1,22 @@
 import { Go } from './wasm_exec'
 import quorumWasmUrl from './lib.wasm'
-import { ICreateGroupParams, ICreateGroupResult, IGroupsInfo, INodeInfo } from './types';
+import {
+  ICreateGroupParams,
+  ICreateGroupResult,
+  IGroupsInfo,
+  INodeInfo
+} from './types'
 
 const init = async () => {
-  const go = new Go();
-  const r = await WebAssembly.instantiateStreaming(fetch(quorumWasmUrl), go.importObject);
-  go.run(r.instance);
+  const go = new Go()
+  const r = await WebAssembly.instantiateStreaming(
+    fetch(quorumWasmUrl),
+    go.importObject
+  )
+  go.run(r.instance)
 }
 
-init();
+init()
 
 export const startQuorum = async (bootstraps: Array<string>) => {
   await StartQuorum('password', bootstraps.join(','))
