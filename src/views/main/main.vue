@@ -4,14 +4,14 @@
       <el-aside :width="isCollapse ? '60px' : '210px'">
         <nav-menu
           :collapse="isCollapse"
-          @reqGroupContent="handlereqGroupContent"
+          @reqGroupContent="handleReqGroupContent"
         />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
-        <el-main class="page-content">Main</el-main>
+        <el-main class="page-content" >Main</el-main>
       </el-container>
     </el-container>
   </div>
@@ -34,7 +34,7 @@ export default defineComponent({
       isCollapse.value = isFold
     }
 
-    const handlereqGroupContent = (group_id: string | undefined) => {
+    const handleReqGroupContent = (group_id: string | undefined) => {
       console.log(group_id)
       getGroupContent(group_id).then((res) => {
         console.log(res)
@@ -43,7 +43,7 @@ export default defineComponent({
     return {
       isCollapse,
       handleFoldChange,
-      handlereqGroupContent
+      handleReqGroupContent
     }
   }
 })
