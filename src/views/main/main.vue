@@ -11,7 +11,9 @@
         <el-header class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
-        <el-main class="page-content" >Main</el-main>
+        <el-main class="page-content" :groupId="selectedGroupid">
+          <rum-home />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -21,20 +23,24 @@
 import { defineComponent, ref } from 'vue'
 import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
+import RumHome from '@/components/home'
 import { getGroupContent } from '@/service/content/getcontent'
 
 export default defineComponent({
   components: {
     NavHeader,
-    NavMenu
+    NavMenu,
+    RumHome
   },
   setup() {
-    const isCollapse = ref(false)
+    const selectedGroupid = ref<any>()
+    const isCollapse = ref<Boolean>(false)
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }
 
     const handleReqGroupContent = (group_id: string | undefined) => {
+      selectedGroupid.value = group_id
       console.log(group_id)
       getGroupContent(group_id).then((res) => {
         console.log(res)
@@ -42,6 +48,7 @@ export default defineComponent({
     }
     return {
       isCollapse,
+      selectedGroupid,
       handleFoldChange,
       handleReqGroupContent
     }
