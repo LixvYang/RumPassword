@@ -2,16 +2,15 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <nav-menu
-          :collapse="isCollapse"
-          @reqGroupContent="handleReqGroupContent"
-        />
+        <nav-menu :collapse="isCollapse" />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
-        <el-main class="page-content" >Main</el-main>
+        <el-main class="page-content">
+          <rum-home />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -21,29 +20,23 @@
 import { defineComponent, ref } from 'vue'
 import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
-import { getGroupContent } from '@/service/content/getcontent'
+import RumHome from '@/components/home'
 
 export default defineComponent({
   components: {
     NavHeader,
-    NavMenu
+    NavMenu,
+    RumHome
   },
   setup() {
-    const isCollapse = ref(false)
+    const isCollapse = ref<boolean>(false)
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }
 
-    const handleReqGroupContent = (group_id: string | undefined) => {
-      console.log(group_id)
-      getGroupContent(group_id).then((res) => {
-        console.log(res)
-      })
-    }
     return {
       isCollapse,
-      handleFoldChange,
-      handleReqGroupContent
+      handleFoldChange
     }
   }
 })

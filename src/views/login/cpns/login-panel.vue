@@ -1,7 +1,7 @@
 <template>
   <div class="login-panel">
     <h1 class="title">RumPassword</h1>
-    <el-tabs
+    <!-- <el-tabs
       :tab-position="tabPosition"
       style="height: 100px"
       class="demo-tabs"
@@ -25,16 +25,17 @@
         </template>
         <node-run />
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
+    <node-run />
   </div>
 </template>
 
 <script>
-import NodeCreate from './node-create.vue'
+// import NodeCreate from './node-create.vue'
 import NodeRun from './node-run.vue'
 export default {
   components: {
-    NodeCreate,
+    // NodeCreate,
     NodeRun
   },
   setup() {

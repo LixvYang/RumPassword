@@ -56,10 +56,10 @@ export interface Group {
   snapshot_info?: null
 }
 
-export interface GroupContent {
+export interface GroupContent<T = any> {
   TrxId?: string
   Publisher?: string
-  Content?: Content
+  Content?: T
   TypeUrl?: string
   TimeStamp?: number
 }

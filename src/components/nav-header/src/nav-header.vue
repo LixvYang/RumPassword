@@ -11,8 +11,8 @@
       @click="handleFoldClick"
     ></DArrowRight>
     <div>vue3-app {{ $t('home.name') }}</div>
-    <el-button @click="getgroups">请求群组</el-button>
-    <el-button @click="getnodeinfo">请求节点信息</el-button>
+
+    <!-- <el-button @click="getgroups">请求群组</el-button> -->
 
     <el-dropdown @command="handleCommand" class="nav-lang">
       <span class="el-dropdown-link">
@@ -31,22 +31,58 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
+    <div class="node-info">
+      <el-button @click="nodeInfoDialog = true" circle type="primary"
+        ><el-icon><User /> </el-icon
+      ></el-button>
+    </div>
+
+    <el-dialog
+      v-model="nodeInfoDialog"
+      title="Notice"
+      width="50%"
+      destroy-on-close
+      center
+      draggable
+    >
+      <template v-for="(val, key) in nodeInfo" :key="key">
+        <div v-if="key !== 'peers'">
+          <span class="nodeinfo-key">{{ key }}:</span>
+          <span class="nodeinfo-val">{{ val }}</span>
+        </div>
+        <template v-if="key === 'peers'">
+          <div>
+            <span class="nodeinfo-key">{{ key }}: </span>
+            <span class="nodeinfo-val">
+              <template v-for="(v, k) in val" :key="k">
+                <span>{{ k }} : </span>
+                <span>{{ v }}</span>
+              </template>
+            </span>
+          </div>
+        </template>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, reactive } from 'vue'
 import { getGroups } from '@/service/groups/getgroups'
 import { getNodeInfo } from '@/service/node/getnodeinfo'
 import { useStore } from '@/store'
 import { useI18n } from 'vue-i18n'
 import { langType } from '../index'
+import { INodeInfo } from '@/utils/quorum-wasm/types'
+import localCache from '@/utils/cache/cache'
 
 export default defineComponent({
   emits: ['foldChange'],
   setup(props, { emit }) {
     const store = useStore()
     const isFold = ref(false)
+    const nodeInfoDialog = ref(false)
+    const nodeInfo: INodeInfo = reactive(localCache.getCache('nodeInfo') ?? '')
 
     const getgroups = () => {
       getGroups().then((res) => {
@@ -80,7 +116,9 @@ export default defineComponent({
       getnodeinfo,
       handleCommand,
       language,
-      langType
+      langType,
+      nodeInfoDialog,
+      nodeInfo
     }
   }
 })
@@ -97,11 +135,27 @@ export default defineComponent({
     height: 1em;
     margin-right: 8px;
   }
+  .node-info {
+    display: flex;
+    align-content: center;
+    justify-content: end;
+    position: relative;
+    right: 200px;
+  }
   .nav-lang {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    position: relative;
+    right: 50px;
     width: 100%;
+  }
+  .nodeinfo-key {
+    font-size: medium;
+  }
+  .nodeinfo-val {
+    font-size: medium;
+    color: rgb(31, 154, 195);
   }
 }
 </style>

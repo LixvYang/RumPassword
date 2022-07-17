@@ -18,7 +18,6 @@
           <span>{{ group.group_name?.charAt(0) }}</span>
         </el-menu-item>
       </template>
-      <!-- <el-button @click="getGroupsInfo">请求组数据</el-button> -->
     </el-menu>
   </div>
 </template>
@@ -34,24 +33,16 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['reqGroupContent'],
-  setup(props, { emit }) {
+  setup() {
     const store = useStore()
 
     const groups = computed(() => store.state.login.groupsInfo.groups)
-    const getGroupsInfo = () => {
-      console.log(groups)
-      for (const group in groups) {
-        console.log(group)
-      }
-    }
 
     const handleMenuItemClick = (group_id: string | undefined) => {
-      emit('reqGroupContent', group_id)
+      store.dispatch('main/handleGroupIdAction', group_id)
     }
 
     return {
-      getGroupsInfo,
       groups,
       handleMenuItemClick
     }

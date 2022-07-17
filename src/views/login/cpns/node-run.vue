@@ -60,7 +60,7 @@ export default defineComponent({
     const store = useStore()
 
     const dialogFormVisible = ref(false)
-    let form: IBootstrap = reactive(
+    const form: IBootstrap = reactive(
       localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY') ?? bootstrapsForm
     )
 
