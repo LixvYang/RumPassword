@@ -13,3 +13,4 @@ app.use(store)
 app.use(globalRegister)
 app.use(i18n)
 app.mount('#app')
+

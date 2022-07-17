@@ -4,14 +4,13 @@
       <el-aside :width="isCollapse ? '60px' : '210px'">
         <nav-menu
           :collapse="isCollapse"
-          @reqGroupContent="handleReqGroupContent"
         />
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
-        <el-main class="page-content" :groupId="selectedGroupid">
+        <el-main class="page-content">
           <rum-home />
         </el-main>
       </el-container>
@@ -33,24 +32,14 @@ export default defineComponent({
     RumHome
   },
   setup() {
-    const selectedGroupid = ref<any>()
     const isCollapse = ref<Boolean>(false)
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }
 
-    const handleReqGroupContent = (group_id: string | undefined) => {
-      selectedGroupid.value = group_id
-      console.log(group_id)
-      getGroupContent(group_id).then((res) => {
-        console.log(res)
-      })
-    }
     return {
       isCollapse,
-      selectedGroupid,
       handleFoldChange,
-      handleReqGroupContent
     }
   }
 })
