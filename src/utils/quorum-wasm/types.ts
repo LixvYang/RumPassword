@@ -69,3 +69,10 @@ export interface Content {
   content?: string
   name?: string
 }
+
+export interface CreateGroupParams {
+  group_name?: string
+  consensus_type?: string
+  encryption_type?: string
+  app_key?: string
+}

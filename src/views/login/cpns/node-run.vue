@@ -3,13 +3,12 @@
     <el-button @click="dialogFormVisible = true" type="primary"
       >在浏览器中运行</el-button
     >
-
     <el-dialog
       class="create-dialog"
       v-model="dialogFormVisible"
       title="Bootstraps"
       draggable
-      width="600px"
+      width="45%"
       center
     >
       <div class="bootstraps">
