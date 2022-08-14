@@ -25,7 +25,8 @@ import {
   DArrowLeft,
   DArrowRight,
   ArrowDown,
-  User
+  User,
+  CopyDocument
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -46,7 +47,15 @@ const components = [
   ArrowDown,
   ElScrollbar
 ]
-const Icons = [CirclePlus, Folder, RefreshRight, Plus, Delete, User]
+const Icons = [
+  CirclePlus,
+  Folder,
+  RefreshRight,
+  Plus,
+  Delete,
+  User,
+  CopyDocument
+]
 
 export default function (app: App): void {
   for (const icon of Icons) {

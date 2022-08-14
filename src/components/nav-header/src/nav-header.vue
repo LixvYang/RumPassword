@@ -138,7 +138,7 @@ export default defineComponent({
   .node-info {
     display: flex;
     align-content: center;
-    justify-content: end;
+    justify-content: flex-end;
     position: relative;
     right: 200px;
   }
