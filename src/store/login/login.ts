@@ -37,10 +37,11 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   mutations: {
-    changeNodeInfo(state, nodeInfo: any) {
+    changeNodeInfo(state, nodeInfo: INodeInfo) {
       state.nodeInfo = nodeInfo
     },
-    changeGroupsInfo(state, groupsInfo: any) {
+    changeGroupsInfo(state, groupsInfo: IGroupsInfo) {
+      console.log('请求到了groups info')
       state.groupsInfo = groupsInfo
     }
   },

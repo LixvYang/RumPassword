@@ -51,6 +51,7 @@ import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import { createGroup } from '@/service/groups/creategroup'
 import { getGroups } from '@/service/groups/getgroups'
+import { IGroupsInfo } from '@/utils/quorum-wasm/types'
 
 export default defineComponent({
   props: {
@@ -71,31 +72,28 @@ export default defineComponent({
     }
 
     const handleAddGroupBtn = (createGroupName: string) => {
-      console.log('创建之前的组')
-      console.log(groups.value)
-      createGroup(createGroupName)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      console.log(groups.value)
-      let groupsInfo: any
-      getGroups().then((res) => {
-        groupsInfo = res.groups
-        console.log('res.groups: ')
-        console.log(res.groups)
-      })
-      console.log('新请求的组信息是')
-      console.log(groupsInfo)
-      store.commit('login/changeGroupsInfo', groupsInfo)
-      console.log(groups.value)
+      const data = async () => {
+        createGroup(createGroupName)
+          .then(async (res) => {
+            const groupsInfo: IGroupsInfo = await getGroups()
+            console.log('commit前， groups info')
+            console.log(groupsInfo)
+            store.commit('login/changeGroupsInfo', groupsInfo)
+            console.log('commit后， groups是')
+            console.log(groups)
+            console.log(res)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+      data()
     }
 
     watch(groups, (newValue, oldValue: any) => {
       console.log('监听groups变化')
       console.log(oldValue)
+      console.log(newValue)
     })
 
     return {
