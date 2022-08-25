@@ -28,11 +28,6 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const getGroupContent = () => {
-      console.log(props.content)
-    }
-    getGroupContent()
-
     const copyContentItemBtn = (content: string | undefined) => {
       console.log(content)
       const clipboard = new Clipboard('.content-item-copybtn')

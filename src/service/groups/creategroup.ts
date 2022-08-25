@@ -13,7 +13,6 @@ export function getGroups() {
 }
 
 export function createGroup(groupName: string) {
-  console.log('请求到了createGroup')
   return rumrequest.post<CreateGroupParams>({
     url: GroupAPI.CreateGroup,
     data: {

@@ -9,6 +9,7 @@ const mainModule: Module<IMainState, IRootState> = {
   state() {
     return {
       group: {},
+      groupId: '',
       groupContent: []
     }
   },
@@ -17,12 +18,16 @@ const mainModule: Module<IMainState, IRootState> = {
       const groupContent: GroupContent<Content>[] = await getGroupContent(
         payload
       )
+      commit('changeGroupId', payload)
       commit('changeGroupContent', groupContent)
     }
   },
   mutations: {
     changeGroupContent(state, groupContent: GroupContent[]) {
       state.groupContent = groupContent
+    },
+    changeGroupId(state, groupId: string) {
+      state.groupId = groupId
     }
   },
   getters: {}
