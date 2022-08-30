@@ -11,10 +11,27 @@
           @click="handleMenuItemClick(group.group_id)"
         >
           <span>{{ group.group_name }}</span>
+
+          <el-popconfirm
+            confirm-button-text="Yes"
+            cancel-button-text="No"
+            icon-color="#626AEF"
+            title="Are you sure to delete this group?"
+            @confirm="handleDeleteGroupBtn(group.group_id)"
+          >
+            <template #reference>
+              <el-button circle size="small" class="deleteGroupBtn"
+                ><el-icon color="#F56C6C"><Delete /></el-icon
+              ></el-button>
+            </template>
+          </el-popconfirm>
         </el-menu-item>
       </template>
       <template v-for="(group, index) of groups" :key="group" v-if="collapse">
-        <el-menu-item :index="index + ''">
+        <el-menu-item
+          :index="index + ''"
+          @click="handleMenuItemClick(group.group_id)"
+        >
           <span>{{ group.group_name?.charAt(0) }}</span>
         </el-menu-item>
       </template>
@@ -47,10 +64,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
 import { createGroup } from '@/service/groups/creategroup'
 import { getGroups } from '@/service/groups/getgroups'
+import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
+import { IGroupsInfo } from '@/utils/quorum-wasm/types'
 
 export default defineComponent({
   props: {
@@ -71,32 +90,35 @@ export default defineComponent({
     }
 
     const handleAddGroupBtn = (createGroupName: string) => {
-      console.log('创建之前的组')
-      console.log(groups.value)
-      createGroup(createGroupName)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      console.log(groups.value)
-      let groupsInfo: any
-      getGroups().then((res) => {
-        groupsInfo = res.groups
-        console.log('res.groups: ')
-        console.log(res.groups)
-      })
-      console.log('新请求的组信息是')
-      console.log(groupsInfo)
-      store.commit('login/changeGroupsInfo', groupsInfo)
-      console.log(groups.value)
+      const data = async () => {
+        createGroup(createGroupName)
+          .then(async () => {
+            const groupsInfo: IGroupsInfo = await getGroups()
+            store.commit('login/changeGroupsInfo', groupsInfo)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+      data()
+      addGroupDrawer.value = !addGroupDrawer.value
     }
 
-    watch(groups, (newValue, oldValue: any) => {
-      console.log('监听groups变化')
-      console.log(oldValue)
-    })
+    const handleDeleteGroupBtn = (group_id: string | undefined) => {
+      console.log(group_id)
+      const data = async () => {
+        clearGroup(group_id)
+          .then(async () => {
+            leaveGroup(group_id).then(async () => {
+              const groupsInfo: IGroupsInfo = await getGroups()
+              console.log(groupsInfo)
+              store.commit('login/changeGroupsInfo', groupsInfo)
+            })
+          })
+          .catch((e) => console.log(e))
+      }
+      data()
+    }
 
     return {
       groups,
@@ -104,7 +126,8 @@ export default defineComponent({
       addGroupDrawer,
       drawerDir,
       createGroupName,
-      handleAddGroupBtn
+      handleAddGroupBtn,
+      handleDeleteGroupBtn
     }
   }
 })
@@ -154,7 +177,7 @@ export default defineComponent({
 
   // hover 高亮
   .el-menu-item:hover {
-    color: #fff !important; // 菜单
+    color: rgb(56, 128, 119) !important; // 菜单
   }
 
   .el-menu-item.is-active {
@@ -229,6 +252,18 @@ export default defineComponent({
 .el-menu-vertical:not(.el-menu--collapse) {
   width: 100%;
   height: calc(100% - 48px);
+  position: relative;
+
+  .deleteGroupBtn {
+    align-content: center;
+    color: #e76565;
+    display: flex;
+    position: absolute;
+    left: 80%;
+  }
+  .deleteGroupBtn:hover {
+    background: rgb(175, 46, 46);
+  }
 }
 .addGroupDialog {
   height: 50%;

@@ -14,7 +14,8 @@ import {
   ElDropdown,
   ElDropdownItem,
   ElDropdownMenu,
-  ElScrollbar
+  ElScrollbar,
+  ElPopconfirm
 } from 'element-plus/lib/index'
 import {
   CirclePlus,
@@ -45,7 +46,8 @@ const components = [
   ElDropdownMenu,
   ElDropdownItem,
   ArrowDown,
-  ElScrollbar
+  ElScrollbar,
+  ElPopconfirm
 ]
 const Icons = [
   CirclePlus,

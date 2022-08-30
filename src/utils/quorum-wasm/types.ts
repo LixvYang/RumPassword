@@ -76,3 +76,29 @@ export interface CreateGroupParams {
   encryption_type?: string
   app_key?: string
 }
+
+export interface ClearGroupParams {
+  group_id?: string
+}
+
+export interface DeleteGroupParams {
+  group_id?: string
+}
+
+export interface PostContentToGroupParams {
+  type?: string
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  object?: Object
+  target?: Target
+}
+
+export interface Object {
+  type?: string
+  content?: string
+  name?: string
+}
+
+export interface Target {
+  id?: string
+  type?: string
+}
