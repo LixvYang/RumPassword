@@ -1,16 +1,20 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="login">
-    <LoginPanel />
+    <mobileLoginVue class="mobile-nav" />
+    <LoginPanel class="pc-nav" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import LoginPanel from './cpns/login-panel.vue'
+import mobileLoginVue from './cpns/mobile-login.vue'
 
 export default defineComponent({
   components: {
-    LoginPanel
+    LoginPanel,
+    mobileLoginVue
   },
   setup() {
     return {}
@@ -26,5 +30,19 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   background: url('../../assets/img/login-bg.svg');
+}
+</style>
+
+<style scoped>
+@media screen and (max-width: 1024px) {
+  .pc-nav {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .mobile-nav {
+    display: none !important;
+  }
 }
 </style>
