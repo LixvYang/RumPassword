@@ -15,16 +15,57 @@
       ref="drawerRef"
       v-model="addContentForm"
       title="添加密码"
-      direction="ltr"
+      direction="rtl"
       custom-class="demo-drawer"
+      size="40%"
     >
       <div class="addContentToGroup">
         <el-form :model="contentForm">
           <el-form-item label="Name" :label-width="formLabelWidth">
-            <el-input v-model="contentForm.name" autocomplete="off" />
+            <el-input
+              v-model="contentForm.name"
+              autocomplete="off"
+              placeholder="Please input name"
+            />
           </el-form-item>
+          <div>
+            <div class="slider-demo-block">
+              <span class="demonstration">密码长度</span>
+              <el-slider
+                v-model="passwordLen"
+                show-input
+                size="small"
+                :min="5"
+                :max="128"
+              />
+            </div>
+            <div class="passwordStrongSet">
+              <span class="passwordNumbers"
+                >0-9 <el-switch v-model="passwordNumbers"
+              /></span>
+              <span class="passwordSymbols"
+                >!@#$%^&*<el-switch v-model="passwordSymbols"
+              /></span>
+              <span
+                >生成<el-button
+                  @click="
+                    generatePassword(
+                      passwordLen,
+                      passwordNumbers,
+                      passwordSymbols
+                    )
+                  "
+                  ><el-icon><Refresh /></el-icon></el-button
+              ></span>
+            </div>
+          </div>
           <el-form-item label="Password" :label-width="formLabelWidth">
-            <el-input v-model="contentForm.content" autocomplete="off" />
+            <el-input
+              v-model="contentForm.content"
+              autocomplete="off"
+              placeholder="Please input password"
+              show-password
+            />
           </el-form-item>
         </el-form>
         <div class="demo-drawer__footer">
@@ -47,6 +88,8 @@ import ContentItem from '@/components/home/cpns/content-item.vue'
 import { ElDrawer } from 'element-plus/lib/components'
 import { postGroupContent } from '@/service/content/postcontent'
 import { ElLoading } from 'element-plus'
+import generator from 'generate-password'
+import content from '@/utils/lang/zh-cn'
 
 export default defineComponent({
   components: {
@@ -58,6 +101,9 @@ export default defineComponent({
     const formLabelWidth = '80px'
     const drawerRef = ref<InstanceType<typeof ElDrawer>>()
     const loading = ref(false)
+    const passwordLen = ref(12)
+    const passwordNumbers = ref(true)
+    const passwordSymbols = ref(true)
 
     const contentForm = reactive({
       content: '',
@@ -70,8 +116,11 @@ export default defineComponent({
 
     const onClick = () => {
       drawerRef.value?.close()
+      if (contentForm.content == '' || contentForm.name == '') {
+        alert('不可以为空')
+        return
+      }
 
-      console.log(selectGroupId.value.toString())
       postGroupContent(
         selectGroupId.value.toString(),
         contentForm.content,
@@ -80,12 +129,19 @@ export default defineComponent({
       const openFullScreen = () => {
         const loading = ElLoading.service({
           lock: true,
-          text: 'Loading',
+          text: '等待以下喔',
           background: 'rgba(0, 0, 0, 0.7)'
         })
         setTimeout(() => {
           loading.close()
         }, 5000)
+
+        setTimeout(() => {
+          store.dispatch(
+            'main/handleGroupIdAction',
+            selectGroupId.value.toString()
+          )
+        }, 20000)
       }
       const data = async () => {
         getGroupContent(selectGroupId.value.toString()).then(
@@ -107,6 +163,8 @@ export default defineComponent({
     const cancelContenteForm = () => {
       loading.value = false
       addContentForm.value = false
+      contentForm.content = ''
+      contentForm.name = ''
       clearTimeout(1000)
     }
 
@@ -114,8 +172,29 @@ export default defineComponent({
 
     const groupContentId = reactive(getGroupContent)
     const handleAddGroupContent = () => {
-      addContentForm.value = !addContentForm.value
+      console.log('selectGroupId' + selectGroupId.value.toString())
+      if (selectGroupId.value.toString() == '') {
+        alert('请先选择一个组')
+        console.log('请先选择一个组')
+      } else {
+        addContentForm.value = !addContentForm.value
+      }
     }
+
+    const generatePassword = function (
+      passwordLen: number,
+      passwordNumbers: boolean,
+      passwordSymbols: boolean
+    ) {
+      console.log('发送generatePassword')
+      const password = generator.generate({
+        length: passwordLen,
+        numbers: passwordNumbers,
+        symbols: passwordSymbols
+      })
+      contentForm.content = password
+    }
+
     return {
       formLabelWidth,
       addContentForm,
@@ -126,7 +205,11 @@ export default defineComponent({
       groupContent,
       groupContentId,
       drawerRef,
-      handleAddGroupContent
+      handleAddGroupContent,
+      passwordLen,
+      passwordNumbers,
+      passwordSymbols,
+      generatePassword
     }
   }
 })
@@ -140,10 +223,44 @@ export default defineComponent({
     height: 50px;
   }
   .addGroupContentBtn {
-    background-color: rgb(86, 143, 173);
+    background-color: #6cb1f5;
     position: absolute;
     top: 100%;
     left: 80%;
+    .passwordNumbers {
+      position: relative;
+      left: 50%;
+    }
+    .passwordSymbols {
+      position: relative;
+      right: 0%;
+    }
+  }
+
+  .slider-demo-block {
+    display: flex;
+    align-items: center;
+  }
+  .slider-demo-block .el-slider {
+    margin-top: 0;
+    margin-left: 12px;
+  }
+  .slider-demo-block .demonstration {
+    font-size: 14px;
+    color: var(--el-text-color-secondary);
+    line-height: 44px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+  .slider-demo-block .demonstration + .el-slider {
+    flex: 0 0 70%;
+  }
+  .passwordStrongSet {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>

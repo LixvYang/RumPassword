@@ -25,7 +25,7 @@ import { defineComponent, reactive, ref } from 'vue'
 
 export default defineComponent({
   setup() {
-    let form = reactive({
+    const form = reactive({
       imgSavePath: ''
     })
     const dialogFormVisible = ref(false)
@@ -36,12 +36,12 @@ export default defineComponent({
       // open.click()
       // const dirName = path.dirname(open?.files[0])
       // console.log(dirName)
-      let file = event.target.files
+      const file = event.target.files
       console.log(file)
     }
 
     const triggerFile = (event: any) => {
-      let file = event.target.files
+      const file = event.target.files
       console.log(file.path)
     }
 

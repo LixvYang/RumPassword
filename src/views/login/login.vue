@@ -29,7 +29,7 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   height: 100%;
-  background: url('../../assets/img/login-bg.svg');
+  /* background-color: rgb(59, 62, 64); */
 }
 </style>
 
