@@ -15,6 +15,7 @@ const mainModule: Module<IMainState, IRootState> = {
   },
   actions: {
     async handleGroupIdAction({ commit }, payload: string | undefined) {
+      console.log('发生handleGroupIdAction')
       const groupContent: GroupContent<Content>[] = await getGroupContent(
         payload
       )
@@ -27,6 +28,7 @@ const mainModule: Module<IMainState, IRootState> = {
       state.groupContent = groupContent
     },
     changeGroupId(state, groupId: string) {
+      console.log(groupId)
       state.groupId = groupId
     }
   },

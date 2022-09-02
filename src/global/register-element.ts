@@ -15,7 +15,8 @@ import {
   ElDropdownItem,
   ElDropdownMenu,
   ElScrollbar,
-  ElPopconfirm
+  ElPopconfirm,
+  ElSlider
 } from 'element-plus/lib/index'
 import {
   CirclePlus,
@@ -27,7 +28,8 @@ import {
   DArrowRight,
   ArrowDown,
   User,
-  CopyDocument
+  CopyDocument,
+  Refresh
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -47,7 +49,8 @@ const components = [
   ElDropdownItem,
   ArrowDown,
   ElScrollbar,
-  ElPopconfirm
+  ElPopconfirm,
+  ElSlider
 ]
 const Icons = [
   CirclePlus,
@@ -56,7 +59,8 @@ const Icons = [
   Plus,
   Delete,
   User,
-  CopyDocument
+  CopyDocument,
+  Refresh
 ]
 
 export default function (app: App): void {

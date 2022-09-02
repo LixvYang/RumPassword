@@ -1,4 +1,7 @@
+import store from '@/store'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { useStore } from '@/store'
+import { computed } from 'vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,6 +30,11 @@ router.beforeEach((to) => {
       return '/login'
     }
   }
+  // const store = useStore()
+  // const loading = computed(() => store.state.main.nodeLoading)
+  // if (!loading.value) {
+  //   return '/login'
+  // }
 })
 
 export default router

@@ -12,6 +12,7 @@ const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
   state() {
     return {
+      nodeLoading: false,
       nodeInfo: {},
       groupsInfo: {}
     }
@@ -21,16 +22,16 @@ const loginModule: Module<ILoginState, IRootState> = {
       // 实现登录逻辑
       // 创建节点
       await startQuorum(payload.bootstraps)
+      // 将nodeLoading 设置为true
+      commit('changeNodeLoading', true)
       // 请求节点信息
       const nodeInfo: INodeInfo = await getNodeInfo()
       commit('changeNodeInfo', nodeInfo)
-      console.log(nodeInfo)
       localStorage.setItem('nodeInfo', JSON.stringify(nodeInfo))
       // 请求组信息
       const groupsInfo: IGroupsInfo = await getGroups()
       commit('changeGroupsInfo', groupsInfo)
       localStorage.setItem('groupsInfo', JSON.stringify(groupsInfo))
-      console.log(groupsInfo)
 
       // 跳转到main
       router.push('/main')
@@ -43,6 +44,9 @@ const loginModule: Module<ILoginState, IRootState> = {
     changeGroupsInfo(state, groupsInfo: IGroupsInfo) {
       console.log('请求到了groups info')
       state.groupsInfo = groupsInfo
+    },
+    changeNodeLoading(state, loading: boolean) {
+      state.nodeLoading = loading
     }
   },
   getters: {}

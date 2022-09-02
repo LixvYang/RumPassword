@@ -4,7 +4,7 @@
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
       <span class="title" v-if="!collapse">RumPassword</span>
     </div>
-    <el-menu default-active="0" class="el-menu-vertical">
+    <el-menu class="el-menu-vertical">
       <template v-for="(group, index) of groups" :key="group" v-if="!collapse">
         <el-menu-item
           :index="index + ''"
