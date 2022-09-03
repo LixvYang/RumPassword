@@ -1,7 +1,10 @@
 <template>
   <div class="rum-home">
     <template v-for="contentItem in groupContent" :key="contentItem">
-      <content-item :content="contentItem"></content-item>
+      <content-item
+        :content="contentItem"
+        @change-content-item="changeContentItem"
+      ></content-item>
     </template>
     <el-button
       circle
@@ -26,6 +29,7 @@
               v-model="contentForm.name"
               autocomplete="off"
               placeholder="Please input name"
+              :disabled="ifdisabled"
             />
           </el-form-item>
           <div>
@@ -82,14 +86,16 @@
 <script lang="ts">
 import { getGroupContent } from '@/service/content/getcontent'
 import { useStore } from '@/store'
-import { Content, GroupContent } from '@/utils/quorum-wasm/types'
+import { NewContent } from '@/utils/quorum-wasm/types'
 import { computed, ComputedRef, defineComponent, reactive, ref } from 'vue'
 import ContentItem from '@/components/home/cpns/content-item.vue'
 import { ElDrawer } from 'element-plus/lib/components'
-import { postGroupContent } from '@/service/content/postcontent'
+import {
+  changeGroupContent,
+  postGroupContent
+} from '@/service/content/postcontent'
 import { ElLoading } from 'element-plus'
 import generator from 'generate-password'
-import content from '@/utils/lang/zh-cn'
 
 export default defineComponent({
   components: {
@@ -103,15 +109,16 @@ export default defineComponent({
     const loading = ref(false)
     const passwordLen = ref(12)
     const passwordNumbers = ref(true)
-    const passwordSymbols = ref(true)
+    const passwordSymbols = ref(false)
+    const ifdisabled = ref(false)
 
     const contentForm = reactive({
       content: '',
       name: ''
     })
 
-    const groupContent: ComputedRef<GroupContent<Content>[]> = computed(
-      () => store.state.main.groupContent
+    const groupContent: ComputedRef<NewContent[]> = computed(
+      () => store.state.main.newGroupContent
     )
 
     const onClick = () => {
@@ -121,11 +128,39 @@ export default defineComponent({
         return
       }
 
-      postGroupContent(
-        selectGroupId.value.toString(),
-        contentForm.content,
-        contentForm.name
-      )
+      if (ifdisabled.value === true) {
+        const selectedGroupid = computed(() => store.state.main.groupId)
+        let changeTrxId: string | undefined = ''
+        getGroupContent(selectedGroupid.value)
+          .then((groupContent) => {
+            for (let i = groupContent.length - 1; i >= 0; i--) {
+              if (groupContent[i].Content?.name == contentForm.name) {
+                changeTrxId = groupContent[i].TrxId
+              }
+            }
+          })
+          .then(() => {
+            changeGroupContent(
+              changeTrxId,
+              selectedGroupid.value,
+              contentForm.content,
+              contentForm.name
+            )
+            setTimeout(() => {
+              store.dispatch(
+                'main/handleGroupIdAction',
+                selectedGroupid.value.toString()
+              )
+            }, 20000)
+          })
+      } else {
+        postGroupContent(
+          selectGroupId.value.toString(),
+          contentForm.content,
+          contentForm.name
+        )
+      }
+
       const openFullScreen = () => {
         const loading = ElLoading.service({
           lock: true,
@@ -146,8 +181,6 @@ export default defineComponent({
       const data = async () => {
         getGroupContent(selectGroupId.value.toString()).then(
           async (groupCtn) => {
-            console.log('组的内容已经改变')
-            console.log(groupCtn)
             store.commit('main/changeGroupContent', groupCtn)
             store.commit('main/changeGroupId', selectGroupId.value.toString())
             contentForm.content = ''
@@ -158,6 +191,12 @@ export default defineComponent({
       }
 
       data()
+    }
+
+    const changeContentItem = (changeContentItemName: string) => {
+      contentForm.name = changeContentItemName
+      ifdisabled.value = true
+      addContentForm.value = true
     }
 
     const cancelContenteForm = () => {
@@ -172,12 +211,12 @@ export default defineComponent({
 
     const groupContentId = reactive(getGroupContent)
     const handleAddGroupContent = () => {
-      console.log('selectGroupId' + selectGroupId.value.toString())
       if (selectGroupId.value.toString() == '') {
         alert('请先选择一个组')
         console.log('请先选择一个组')
       } else {
         addContentForm.value = !addContentForm.value
+        ifdisabled.value = false
       }
     }
 
@@ -209,7 +248,9 @@ export default defineComponent({
       passwordLen,
       passwordNumbers,
       passwordSymbols,
-      generatePassword
+      generatePassword,
+      changeContentItem,
+      ifdisabled
     }
   }
 })

@@ -65,7 +65,13 @@ export interface GroupContent<T = any> {
 }
 
 export interface Content {
+  id?: string
   type?: string
+  content?: string
+  name?: string
+}
+
+export interface NewContent {
   content?: string
   name?: string
 }
@@ -93,6 +99,7 @@ export interface PostContentToGroupParams {
 }
 
 export interface Object {
+  id?: string
   type?: string
   content?: string
   name?: string

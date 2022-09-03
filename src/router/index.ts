@@ -32,7 +32,7 @@ router.beforeEach((to) => {
   }
   // const store = useStore()
   // const loading = computed(() => store.state.main.nodeLoading)
-  // if (!loading.value) {
+  // if (loading.value == false) {
   //   return '/login'
   // }
 })

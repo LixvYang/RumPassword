@@ -30,7 +30,7 @@ export default {
   position: absolute;
   .node-run {
     position: relative;
-    top: 35%;
+    top: 40%;
   }
 }
 </style>

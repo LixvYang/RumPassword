@@ -42,7 +42,6 @@ const loginModule: Module<ILoginState, IRootState> = {
       state.nodeInfo = nodeInfo
     },
     changeGroupsInfo(state, groupsInfo: IGroupsInfo) {
-      console.log('请求到了groups info')
       state.groupsInfo = groupsInfo
     },
     changeNodeLoading(state, loading: boolean) {

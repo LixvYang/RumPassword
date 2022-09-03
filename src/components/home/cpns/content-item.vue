@@ -1,24 +1,38 @@
 <template>
   <div class="content-item">
-    {{ content?.Content.name }}
+    {{ content?.name }}
     <el-button
       class="content-item-copybtn"
       circle
       size="small"
-      @click="copyContentItemBtn(content?.Content.content)"
-      :data-clipboard-text="content?.Content.content"
+      @click="copyContentItemBtn"
+      :data-clipboard-text="content?.content"
       ><el-icon color="#409EFF"><CopyDocument /></el-icon
     ></el-button>
-    <el-button class="content-item-deletebtn" circle size="small"
+    <el-button
+      class="content-item-editbtn"
+      circle
+      size="small"
+      @click="changeContentItem(content?.name)"
+      ><el-icon color="#85ce61"><Edit /></el-icon
+    ></el-button>
+    <el-button
+      class="content-item-deletebtn"
+      circle
+      size="small"
+      @click="delContentItem(content?.content, content?.name)"
       ><el-icon color="#F56C6C"><Delete /></el-icon
     ></el-button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import Clipboard from 'clipboard'
 import { ElMessage } from 'element-plus'
+import { delGroupContent } from '@/service/content/delcontent'
+import { useStore } from '@/store'
+import { getGroupContent } from '@/service/content/getcontent'
 
 export default defineComponent({
   props: {
@@ -27,9 +41,10 @@ export default defineComponent({
       require: true
     }
   },
+  emits: ['changeContentItem'],
   setup(props, { emit }) {
-    const copyContentItemBtn = (content: string | undefined) => {
-      console.log(content)
+    const store = useStore()
+    const copyContentItemBtn = () => {
       const clipboard = new Clipboard('.content-item-copybtn')
       clipboard.on('success', () => {
         ElMessage({
@@ -47,8 +62,45 @@ export default defineComponent({
         clipboard.destroy()
       })
     }
+
+    const changeContentItem = (changeContentItemName: string) => {
+      emit('changeContentItem', changeContentItemName)
+    }
+
+    const delContentItem = (
+      delContentItemContent: string,
+      delContentItemName: string
+    ) => {
+      const selectedGroupid = computed(() => store.state.main.groupId)
+      let delTrxId: string | undefined = ''
+      getGroupContent(selectedGroupid.value)
+        .then((groupContent) => {
+          for (let i = groupContent.length - 1; i >= 0; i--) {
+            if (groupContent[i].Content?.content == delContentItemContent) {
+              delTrxId = groupContent[i].TrxId
+            }
+          }
+        })
+        .then(() => {
+          console.log('delTrxId ' + delTrxId)
+
+          console.log(
+            delTrxId + ' ' + selectedGroupid.value + ' ' + delContentItemName
+          )
+          delGroupContent(delTrxId, selectedGroupid.value, delContentItemName)
+          setTimeout(() => {
+            store.dispatch(
+              'main/handleGroupIdAction',
+              selectedGroupid.value.toString()
+            )
+          }, 20000)
+        })
+    }
+
     return {
-      copyContentItemBtn
+      copyContentItemBtn,
+      delContentItem,
+      changeContentItem
     }
   }
 })
@@ -67,13 +119,18 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
+  position: relative;
   .content-item-copybtn {
-    position: relative;
-    left: 50%;
+    position: absolute;
+    left: 100%;
+  }
+  .content-item-editbtn {
+    position: absolute;
+    left: 90%;
   }
   .content-item-deletebtn {
-    position: relative;
-    left: 50%;
+    position: absolute;
+    left: 105%;
   }
 }
 
