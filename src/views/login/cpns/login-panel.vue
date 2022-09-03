@@ -1,6 +1,5 @@
 <template>
   <div class="login-panel">
-    <!-- <h1 class="title">RumPassword</h1> -->
     <div class="node-run">
       <node-run />
     </div>

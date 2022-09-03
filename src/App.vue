@@ -28,7 +28,6 @@ export default defineComponent({
       en
     }
     const locale = computed(() => lang[language.value as keyof typeof lang])
-
     return { locale, ElConfigProvider }
   }
 })

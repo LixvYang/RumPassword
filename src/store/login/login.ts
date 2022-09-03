@@ -7,6 +7,9 @@ import { IGroupsInfo, INodeInfo } from '@/utils/quorum-wasm/types'
 import router from '@/router'
 import { getGroups } from '@/service/groups/getgroups'
 import { getNodeInfo } from '@/service/node/getnodeinfo'
+import { useStore } from '..'
+import { computed } from 'vue'
+import { isMobile } from '@/global/isMobile'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -34,7 +37,11 @@ const loginModule: Module<ILoginState, IRootState> = {
       localStorage.setItem('groupsInfo', JSON.stringify(groupsInfo))
 
       // 跳转到main
-      router.push('/main')
+      if (isMobile() === true) {
+        router.push('mobmain')
+      } else {
+        router.push('/main')
+      }
     }
   },
   mutations: {

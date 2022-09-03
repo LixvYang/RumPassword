@@ -1,15 +1,31 @@
 <template>
   <div class="mobile-login">
-    <button class="login-btn" role="button">在浏览器中运行</button>
+    <button class="login-btn" role="button" @click="loginAction">
+      在浏览器中运行
+    </button>
   </div>
 </template>
 
 <script lang="ts">
+import store from '@/store'
+import { ElLoading } from 'element-plus'
 import { defineComponent } from 'vue'
+import { bootstrapsForm } from '../config/node-config'
 
 export default defineComponent({
   setup() {
-    return {}
+    const loginAction = () => {
+      const loading = ElLoading.service({
+        lock: true,
+        text: '正在请求数据...',
+        background: 'rgba(0, 0, 0, 0.5)'
+      })
+      store.dispatch('login/nodeLoginAction', bootstrapsForm)
+      loading.close()
+    }
+    return {
+      loginAction
+    }
   }
 })
 </script>
@@ -22,8 +38,10 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #5d6f5f;
-
+  background-image: url('../../../assets/img/rumbig.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 90%;
   .login-btn {
     padding: 0.9em 2em;
     position: relative;
