@@ -1,6 +1,5 @@
 <template>
   <div class="login-panel">
-    <!-- <h1 class="title">RumPassword</h1> -->
     <div class="node-run">
       <node-run />
     </div>
@@ -30,7 +29,7 @@ export default {
   position: absolute;
   .node-run {
     position: relative;
-    top: 35%;
+    top: 40%;
   }
 }
 </style>

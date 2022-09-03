@@ -90,6 +90,8 @@ export default defineComponent({
     }
 
     const handleAddGroupBtn = (createGroupName: string) => {
+      store.commit('main/changeGroupContent', [])
+      store.commit('main/clearNewGroupContent')
       const data = async () => {
         createGroup(createGroupName)
           .then(async () => {
@@ -105,13 +107,13 @@ export default defineComponent({
     }
 
     const handleDeleteGroupBtn = (group_id: string | undefined) => {
-      console.log(group_id)
+      store.commit('main/changeGroupContent', [])
+      store.commit('main/clearNewGroupContent')
       const data = async () => {
         clearGroup(group_id)
           .then(async () => {
             leaveGroup(group_id).then(async () => {
               const groupsInfo: IGroupsInfo = await getGroups()
-              console.log(groupsInfo)
               store.commit('login/changeGroupsInfo', groupsInfo)
             })
           })

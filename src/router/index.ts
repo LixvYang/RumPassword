@@ -15,6 +15,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/main',
     component: () => import('@/views/main/main.vue')
+  },
+  {
+    path: '/mobmain',
+    component: () => import('@/views/mobile/mob-main.vue')
   }
 ]
 
@@ -32,7 +36,7 @@ router.beforeEach((to) => {
   }
   // const store = useStore()
   // const loading = computed(() => store.state.main.nodeLoading)
-  // if (!loading.value) {
+  // if (loading.value == false) {
   //   return '/login'
   // }
 })

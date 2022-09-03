@@ -26,3 +26,28 @@ export function postGroupContent(
     }
   })
 }
+
+export function changeGroupContent(
+  trx_id: string | undefined,
+  group_id: string | undefined,
+  content: string | undefined,
+  name: string | undefined
+) {
+  console.log('trx_id =' + trx_id)
+  return rumrequest.post({
+    url: ContentAPI.PostContent,
+    data: {
+      type: 'Add',
+      object: {
+        id: trx_id,
+        type: 'Note',
+        content: content,
+        name: name
+      },
+      target: {
+        id: group_id,
+        type: 'Group'
+      }
+    }
+  })
+}

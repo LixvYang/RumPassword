@@ -29,7 +29,8 @@ import {
   ArrowDown,
   User,
   CopyDocument,
-  Refresh
+  Refresh,
+  Edit
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -60,7 +61,8 @@ const Icons = [
   Delete,
   User,
   CopyDocument,
-  Refresh
+  Refresh,
+  Edit
 ]
 
 export default function (app: App): void {

@@ -29,7 +29,6 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   height: 100%;
-  /* background-color: rgb(59, 62, 64); */
 }
 </style>
 
