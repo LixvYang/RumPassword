@@ -78,12 +78,12 @@ import localCache from '@/utils/cache/cache'
 
 export default defineComponent({
   emits: ['foldChange'],
-  setup(props, { emit }) {
+  async setup(props, { emit }) {
     const store = useStore()
     const isFold = ref(false)
     const nodeInfoDialog = ref(false)
     const nodeInfo: INodeInfo = reactive(localCache.getCache('nodeInfo') ?? '')
-
+    // const nodeInfo: INodeInfo = await GetNodeInfo()
     const getgroups = () => {
       getGroups().then((res) => {
         console.log(res)
