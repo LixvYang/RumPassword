@@ -6,19 +6,23 @@ import { computed } from 'vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: 'login'
+    redirect: 'login',
+    meta: { depth: 1 }
   },
   {
     path: '/login',
-    component: () => import('@/views/login/login.vue')
+    component: () => import('@/views/login/login.vue'),
+    meta: { depth: 1 }
   },
   {
     path: '/main',
-    component: () => import('@/views/main/main.vue')
+    component: () => import('@/views/main/main.vue'),
+    meta: { depth: 2 }
   },
   {
     path: '/mobmain',
-    component: () => import('@/views/mobile/mob-main.vue')
+    component: () => import('@/views/mobile/mob-main.vue'),
+    meta: { depth: 2 }
   }
 ]
 

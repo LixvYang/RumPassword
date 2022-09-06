@@ -7,8 +7,10 @@ declare module '*.vue' {
 
 declare module '*.js'
 declare module '*.wasm'
+declare module '*.css'
 declare let $store: any
 
+declare const GetNodeInfo
 declare const StartQuorum: (...p: Array<any>) => Promise<any>
 declare const StopQuorum: (...p: Array<any>) => Promise<any>
 declare const StartSync: (...p: Array<any>) => Promise<any>

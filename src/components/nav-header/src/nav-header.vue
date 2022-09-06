@@ -83,7 +83,10 @@ export default defineComponent({
     const isFold = ref(false)
     const nodeInfoDialog = ref(false)
     const nodeInfo: INodeInfo = reactive(localCache.getCache('nodeInfo') ?? '')
-
+    // let nodeInfo
+    // GETnodeInfo().then((res) => {
+    //   const nodeInfo = res
+    // })
     const getgroups = () => {
       getGroups().then((res) => {
         console.log(res)
