@@ -1,8 +1,8 @@
 import { Module } from 'vuex'
 import { IRootState } from '../types'
 import { IMainState } from './types'
-import { getGroupContent } from '@/service/content/getcontent'
 import { GroupContent, Content, NewContent } from '@/utils/quorum-wasm/types'
+import { getGroupContent } from '@/service/content/getcontent'
 
 const mainModule: Module<IMainState, IRootState> = {
   namespaced: true,
@@ -16,7 +16,7 @@ const mainModule: Module<IMainState, IRootState> = {
     }
   },
   actions: {
-    async handleGroupIdAction({ commit }, payload: string | undefined) {
+    async handleGroupIdAction({ commit }, payload: string) {
       commit('clearNewGroupContent')
       const groupContent: GroupContent<Content>[] = await getGroupContent(
         payload
@@ -37,6 +37,10 @@ const mainModule: Module<IMainState, IRootState> = {
       state.groupId = groupId
     },
     changeNewGroupContent(state, groupContent: GroupContent[]) {
+      if (!groupContent) {
+        console.log('groupContent 为空')
+        return
+      }
       for (let i = 0; i < groupContent.length; i++) {
         if (!groupContent[i].Content?.id) {
           const NewContentend: NewContent = {

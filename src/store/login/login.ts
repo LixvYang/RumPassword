@@ -1,15 +1,12 @@
 import { Module } from 'vuex'
 import { ILoginState } from './types'
 import { IRootState } from '../types'
-import { startQuorum } from '@/utils/quorum-wasm/load-quorum'
+import { getNodeInfo, startQuorum } from '@/utils/quorum-wasm/load-quorum'
 import { IBootstrap } from '@/views/login/config/node-config'
 import { IGroupsInfo, INodeInfo } from '@/utils/quorum-wasm/types'
 import router from '@/router'
-import { getGroups } from '@/service/groups/getgroups'
-import { getNodeInfo } from '@/service/node/getnodeinfo'
-import { useStore } from '..'
-import { computed } from 'vue'
 import { isMobile } from '@/global/isMobile'
+import { getGroups } from '@/service/groups/getgroups'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -46,6 +43,7 @@ const loginModule: Module<ILoginState, IRootState> = {
   },
   mutations: {
     changeNodeInfo(state, nodeInfo: INodeInfo) {
+      console.log(nodeInfo)
       state.nodeInfo = nodeInfo
     },
     changeGroupsInfo(state, groupsInfo: IGroupsInfo) {
