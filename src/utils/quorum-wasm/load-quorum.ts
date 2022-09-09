@@ -1,11 +1,5 @@
 import { Go } from './wasm_exec'
 import quorumWasmUrl from './lib.wasm'
-import {
-  ICreateGroupParams,
-  ICreateGroupResult,
-  IGroupsInfo,
-  INodeInfo
-} from './types'
 
 const init = async () => {
   const go = new Go()
@@ -22,21 +16,25 @@ export const startQuorum = async (bootstraps: Array<string>) => {
   await StartQuorum('password', bootstraps.join(','))
 }
 
-export const getNodeInfo = async () => {
-  return await GetNodeInfo().then((res: INodeInfo) => {
-    return res
-  })
+export async function getNodeInfo(): Promise<any> {
+  const res: Promise<any> = GetNodeInfo()
+  return res
 }
 
-export const getGroups = async () => {
-  return await GetGroups().then((res) => {
-    console.log(res)
-    return res
-  })
+// export async function getGroups(): Promise<any> {
+//   const res: Promise<any> = GetGroups()
+//   return res
+// }
+
+export async function getGroupContent(p: any): Promise<any> {
+  return await GetContent(p)
+}
+
+export async function postToGroup(p: any): Promise<any> {
+  return await PostToGroup(p)
 }
 
 export const createGroup = async (groupInfo: any) => {
-  console.log('正在建立群组')
   return await CreateGroup(groupInfo)
 }
 

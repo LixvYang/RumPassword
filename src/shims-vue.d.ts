@@ -10,7 +10,7 @@ declare module '*.wasm'
 declare module '*.css'
 declare let $store: any
 
-declare const GetNodeInfo
+// declare const GetNodeInfo
 declare const StartQuorum: (...p: Array<any>) => Promise<any>
 declare const StopQuorum: (...p: Array<any>) => Promise<any>
 declare const StartSync: (...p: Array<any>) => Promise<any>
@@ -30,13 +30,13 @@ declare const GetAppConfigItem: (...p: Array<any>) => Promise<any>
 declare const UpdateProfile: (...p: Array<any>) => Promise<any>
 declare const GetTrx: (...p: Array<any>) => Promise<any>
 declare const PostToGroup: (...p: Array<any>) => Promise<any>
-declare const GetNodeInfo: (...p: Array<any>) => Promise<any>
+declare const GetNodeInfo: () => Promise<any>
 declare const GetNetwork: (...p: Array<any>) => Promise<any>
 declare const GetContent: (...p: Array<any>) => Promise<any>
 declare const JoinGroup: (...p: Array<any>) => Promise<any>
 declare const LeaveGroup: (...p: Array<any>) => Promise<any>
 declare const ClearGroupData: (...p: Array<any>) => Promise<any>
-declare const GetGroups: (...p: Array<any>) => Promise<any>
+declare const GetGroups: () => Promise<any>
 declare const GetKeystoreBackupReadableStream: (
   ...p: Array<any>
 ) => Promise<any>

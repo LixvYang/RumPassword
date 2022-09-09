@@ -67,9 +67,9 @@
 import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
 import { createGroup } from '@/service/groups/creategroup'
-import { getGroups } from '@/service/groups/getgroups'
 import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
 import { IGroupsInfo } from '@/utils/quorum-wasm/types'
+import { getGroups } from '@/service/groups/getgroups'
 
 export default defineComponent({
   props: {
@@ -96,6 +96,7 @@ export default defineComponent({
         createGroup(createGroupName)
           .then(async () => {
             const groupsInfo: IGroupsInfo = await getGroups()
+            console.log(groupsInfo)
             store.commit('login/changeGroupsInfo', groupsInfo)
           })
           .catch((err) => {

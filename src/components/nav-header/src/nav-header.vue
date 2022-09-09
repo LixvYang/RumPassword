@@ -11,9 +11,6 @@
       @click="handleFoldClick"
     ></DArrowRight>
     <div>vue3-app {{ $t('home.name') }}</div>
-
-    <!-- <el-button @click="getgroups">请求群组</el-button> -->
-
     <el-dropdown @command="handleCommand" class="nav-lang">
       <span class="el-dropdown-link">
         <el-button>
@@ -68,8 +65,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from 'vue'
-import { getGroups } from '@/service/groups/getgroups'
-import { getNodeInfo } from '@/service/node/getnodeinfo'
 import { useStore } from '@/store'
 import { useI18n } from 'vue-i18n'
 import { langType } from '../index'
@@ -83,21 +78,6 @@ export default defineComponent({
     const isFold = ref(false)
     const nodeInfoDialog = ref(false)
     const nodeInfo: INodeInfo = reactive(localCache.getCache('nodeInfo') ?? '')
-    // let nodeInfo
-    // GETnodeInfo().then((res) => {
-    //   const nodeInfo = res
-    // })
-    const getgroups = () => {
-      getGroups().then((res) => {
-        console.log(res)
-      })
-    }
-
-    const getnodeinfo = () => {
-      getNodeInfo().then((res) => {
-        console.log(res)
-      })
-    }
 
     const handleFoldClick = () => {
       isFold.value = !isFold.value
@@ -115,8 +95,6 @@ export default defineComponent({
     return {
       isFold,
       handleFoldClick,
-      getgroups,
-      getnodeinfo,
       handleCommand,
       language,
       langType,
