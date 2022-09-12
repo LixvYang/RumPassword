@@ -1,24 +1,23 @@
 <template>
   <div class="app">
-    <!-- <el-config-provider :locale="locale">
+    <el-config-provider :locale="locale">
       <transition
         enter-active-class="animate__animated animate__fadeIn"
         leave-active-class="animate__animated animate__fadeOut"
-      > -->
-    <keep-alive>
-      <router-view class="routeView" />
-    </keep-alive>
-    <!-- </transition> -->
-    <!-- </el-config-provider> -->
+      >
+        <keep-alive>
+          <router-view class="routeView" />
+        </keep-alive>
+      </transition>
+    </el-config-provider>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from 'vue'
+import { computed, defineComponent } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
 import { ElConfigProvider } from 'element-plus'
-import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 
 export default defineComponent({

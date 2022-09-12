@@ -36,7 +36,7 @@
 
     <el-dialog
       v-model="nodeInfoDialog"
-      title="Notice"
+      title="节点信息"
       width="50%"
       destroy-on-close
       center

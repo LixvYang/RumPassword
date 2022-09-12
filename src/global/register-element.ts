@@ -30,7 +30,9 @@ import {
   User,
   CopyDocument,
   Refresh,
-  Edit
+  Edit,
+  Search,
+  More
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -62,7 +64,9 @@ const Icons = [
   User,
   CopyDocument,
   Refresh,
-  Edit
+  Edit,
+  Search,
+  More
 ]
 
 export default function (app: App): void {

@@ -1,5 +1,5 @@
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import store from '@/store'
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { useStore } from '@/store'
 import { computed } from 'vue'
 
@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   routes,
-  history: createWebHashHistory()
+  history: createWebHistory()
 })
 
 router.beforeEach((to) => {

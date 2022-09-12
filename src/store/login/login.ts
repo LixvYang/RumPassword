@@ -30,6 +30,7 @@ const loginModule: Module<ILoginState, IRootState> = {
       localStorage.setItem('nodeInfo', JSON.stringify(nodeInfo))
       // 请求组信息
       const groupsInfo: IGroupsInfo = await getGroups()
+      console.log('groupsInfo:  ' + groupsInfo)
       commit('changeGroupsInfo', groupsInfo)
       localStorage.setItem('groupsInfo', JSON.stringify(groupsInfo))
 
@@ -43,7 +44,6 @@ const loginModule: Module<ILoginState, IRootState> = {
   },
   mutations: {
     changeNodeInfo(state, nodeInfo: INodeInfo) {
-      console.log(nodeInfo)
       state.nodeInfo = nodeInfo
     },
     changeGroupsInfo(state, groupsInfo: IGroupsInfo) {
