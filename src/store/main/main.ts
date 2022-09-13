@@ -9,21 +9,32 @@ const mainModule: Module<IMainState, IRootState> = {
   state() {
     return {
       nodeLoading: false,
-      group: {},
       groupId: '',
       groupContent: [],
-      newGroupContent: []
+      newGroupContent: [],
+      groupName: ''
     }
   },
   actions: {
-    async handleGroupIdAction({ commit }, payload: string) {
+    async handleGroupIdAction({ commit, dispatch }, payload: string) {
+      // const store = useStore()
+      // const groupId = computed(() => store.state.main.groupId)
       commit('clearNewGroupContent')
       const groupContent: GroupContent<Content>[] = await getGroupContent(
         payload
       )
       commit('changeGroupId', payload)
+      dispatch('handleGroupName')
       commit('changeGroupContent', groupContent)
       commit('changeNewGroupContent', groupContent)
+    },
+    handleGroupName(store, config = {}) {
+      const { state, commit, rootState } = store
+      rootState.login.groupsInfo.groups?.forEach((group: any) => {
+        if (group.group_id === state.groupId) {
+          commit('changeGroupName', group.group_name)
+        }
+      })
     }
   },
   mutations: {
@@ -70,6 +81,9 @@ const mainModule: Module<IMainState, IRootState> = {
     },
     changeNodeLoading(state, loading: boolean) {
       state.nodeLoading = loading
+    },
+    changeGroupName(state, groupName: string) {
+      state.groupName = groupName
     }
   },
   getters: {}
