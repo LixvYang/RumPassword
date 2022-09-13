@@ -16,7 +16,8 @@ import {
   ElDropdownMenu,
   ElScrollbar,
   ElPopconfirm,
-  ElSlider
+  ElSlider,
+  ElDivider
 } from 'element-plus/lib/index'
 import {
   CirclePlus,
@@ -32,7 +33,8 @@ import {
   Refresh,
   Edit,
   Search,
-  More
+  More,
+  Back
 } from '@element-plus/icons-vue'
 const components = [
   ElButton,
@@ -53,7 +55,8 @@ const components = [
   ArrowDown,
   ElScrollbar,
   ElPopconfirm,
-  ElSlider
+  ElSlider,
+  ElDivider
 ]
 const Icons = [
   CirclePlus,
@@ -66,7 +69,8 @@ const Icons = [
   Refresh,
   Edit,
   Search,
-  More
+  More,
+  Back
 ]
 
 export default function (app: App): void {

@@ -80,15 +80,15 @@ export default defineComponent({
   position: relative;
   .mob-header-search {
     position: absolute;
-    right: 15%;
-    top: 200%;
+    right: 20%;
+    top: 20%;
     display: flex;
   }
   .mob-header-more {
     display: flex;
     position: absolute;
-    right: 0%;
-    top: 200%;
+    right: 5%;
+    top: 20%;
   }
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div class="content-item">
-    <p>{{ content?.name }}</p>
+    <p>
+      {{ content?.name }}
+    </p>
     <el-button
       class="content-item-copybtn"
       circle
@@ -8,11 +10,8 @@
       :data-clipboard-text="content?.content"
       ><el-icon color="#409EFF"><CopyDocument /></el-icon
     ></el-button>
-    <el-button
-      class="content-item-editbtn"
-      circle
-      @click="changeContentItem(content?.name)"
-      ><el-icon color="#85ce61"><Edit /></el-icon
+    <el-button class="content-item-editbtn" circle>
+      <el-icon color="#85ce61"><Edit /></el-icon
     ></el-button>
     <el-button
       class="content-item-deletebtn"
@@ -38,8 +37,7 @@ export default defineComponent({
       require: true
     }
   },
-  emits: ['changeContentItem'],
-  setup(props, { emit }) {
+  setup() {
     const store = useStore()
     const copyContentItemBtn = () => {
       const clipboard = new Clipboard('.content-item-copybtn')
@@ -60,9 +58,9 @@ export default defineComponent({
       })
     }
 
-    const changeContentItem = (changeContentItemName: string) => {
-      emit('changeContentItem', changeContentItemName)
-    }
+    // const changeContentItem = (changeContentItemName: string) => {
+    //   emit('changeContentItem', changeContentItemName)
+    // }
 
     const delContentItem = (
       delContentItemContent: string,
@@ -96,8 +94,8 @@ export default defineComponent({
 
     return {
       copyContentItemBtn,
-      delContentItem,
-      changeContentItem
+      delContentItem
+      // changeContentItem
     }
   }
 })
@@ -105,11 +103,8 @@ export default defineComponent({
 
 <style scoped lang="less">
 .content-item {
-  .content-item:hover {
-    background-color: rgb(100, 172, 179);
-  }
   margin: auto;
-  width: 60%;
+  width: 100%;
   height: 100%;
   text-align: center;
   display: flex;
@@ -120,21 +115,17 @@ export default defineComponent({
   .content-item-copybtn {
     position: absolute;
     top: 20%;
-    right: 15%;
+    right: 25%;
   }
   .content-item-editbtn {
     position: absolute;
     top: 20%;
-    right: 10%;
+    right: 15%;
   }
   .content-item-deletebtn {
     position: absolute;
     top: 20%;
     right: 5%;
   }
-}
-
-.content-item:hover {
-  background-color: rgb(216, 238, 240);
 }
 </style>

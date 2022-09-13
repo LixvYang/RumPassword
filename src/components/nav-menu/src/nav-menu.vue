@@ -11,7 +11,6 @@
           @click="handleMenuItemClick(group.group_id)"
         >
           <span>{{ group.group_name }}</span>
-
           <el-popconfirm
             confirm-button-text="Yes"
             cancel-button-text="No"
@@ -81,8 +80,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const addGroupDrawer = ref(false)
-    const drawerDir = 'ltr'
     const createGroupName = ref('')
+    const drawerDir = 'ltr'
 
     const groups = computed(() => store.state.login.groupsInfo.groups)
     const handleMenuItemClick = (group_id: string | undefined) => {

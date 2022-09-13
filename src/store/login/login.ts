@@ -30,7 +30,7 @@ const loginModule: Module<ILoginState, IRootState> = {
       localStorage.setItem('nodeInfo', JSON.stringify(nodeInfo))
       // 请求组信息
       const groupsInfo: IGroupsInfo = await getGroups()
-      console.log('groupsInfo:  ' + groupsInfo)
+      console.log('groupsInfo:  ' + groupsInfo.groups?.length)
       commit('changeGroupsInfo', groupsInfo)
       localStorage.setItem('groupsInfo', JSON.stringify(groupsInfo))
 

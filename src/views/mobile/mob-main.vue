@@ -1,10 +1,8 @@
 <template>
   <div class="mob-main">
-    <el-container>
-      <el-header class="mob-header"><MobHeader /></el-header>
-      <el-main class="mob-home"><MobHome /></el-main>
-      <el-footer class="mob-footer">Footer</el-footer>
-    </el-container>
+    <MobHeader class="mob-header" />
+    <MobHome class="mob-home" />
+    <!-- <MobFooter class="mob-footer" /> -->
   </div>
 </template>
 
@@ -23,27 +21,25 @@ export default defineComponent({
 
 <style scoped lang="less">
 .mob-main {
-  // margin: auto;
-  display: flex;
-  position: absolute;
   .mob-header {
-    position: relative;
+    display: flex;
     width: 100%;
-    height: 8%;
+    height: 10%;
     color: rgb(255, 255, 255);
     background-color: #79bbff;
   }
-  .mob-home {
-    position: relative;
-    width: 100%;
-    color: aquamarine;
-    // background-color: rgb(56, 175, 54);
-  }
-  .mob-footer {
-    position: relative;
-    width: 100%;
-    color: aquamarine;
-    // background-color: red;
-  }
+  // .mob-home {
+  //   position: relative;
+  //   height: 100%;
+  //   width: 100%;
+  //   color: aquamarine;
+  //   // background-color: rgb(56, 175, 54);
+  // }
+  // .mob-footer {
+  //   position: relative;
+  //   width: 100%;
+  //   color: aquamarine;
+  //   // background-color: red;
+  // }
 }
 </style>
