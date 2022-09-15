@@ -10,7 +10,11 @@
       :data-clipboard-text="content?.content"
       ><el-icon color="#409EFF"><CopyDocument /></el-icon
     ></el-button>
-    <el-button class="content-item-editbtn" circle>
+    <el-button
+      class="content-item-editbtn"
+      circle
+      @click="changeContentItem(content?.name)"
+    >
       <el-icon color="#85ce61"><Edit /></el-icon
     ></el-button>
     <el-button
@@ -29,6 +33,7 @@ import { ElMessage } from 'element-plus'
 import { delGroupContent } from '@/service/content/delcontent'
 import { useStore } from '@/store'
 import { getGroupContent } from '@/service/content/getcontent'
+import { emit } from 'process'
 
 export default defineComponent({
   props: {
@@ -37,7 +42,8 @@ export default defineComponent({
       require: true
     }
   },
-  setup() {
+  emits: ['changeContentItem'],
+  setup(props, { emit }) {
     const store = useStore()
     const copyContentItemBtn = () => {
       const clipboard = new Clipboard('.content-item-copybtn')
@@ -58,9 +64,9 @@ export default defineComponent({
       })
     }
 
-    // const changeContentItem = (changeContentItemName: string) => {
-    //   emit('changeContentItem', changeContentItemName)
-    // }
+    const changeContentItem = (changeContentItemName: string) => {
+      emit('changeContentItem', changeContentItemName)
+    }
 
     const delContentItem = (
       delContentItemContent: string,
@@ -94,8 +100,8 @@ export default defineComponent({
 
     return {
       copyContentItemBtn,
-      delContentItem
-      // changeContentItem
+      delContentItem,
+      changeContentItem
     }
   }
 })

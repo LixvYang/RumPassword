@@ -14,22 +14,26 @@
         </el-menu>
       </div>
     </template>
-    <template v-else-if="DisplayGroupContent">
-      <div class="group-content-header">
-        <el-button size="large" @click="handleDisplayGroup" circle>
-          <el-icon color="#409EFF"><Back /></el-icon>
-        </el-button>
-        <p class="group-content-header-name">{{ groupName }}</p>
-      </div>
-      <el-divider />
-      <div v-for="contentItem in groupContent" :key="contentItem?.name">
-        <MobContentItem
-          class="content-item"
-          :content="contentItem"
-          @change-content-item="changeContentItem"
-        />
+    <!-- <Transition name="fade"> -->
+    <template v-if="DisplayGroupContent">
+      <div>
+        <div class="group-content-header">
+          <el-button size="large" @click="handleDisplayGroup" circle>
+            <el-icon color="#409EFF"><Back /></el-icon>
+          </el-button>
+          <p class="group-content-header-name">{{ groupName }}</p>
+        </div>
+        <el-divider />
+        <div v-for="contentItem in groupContent" :key="contentItem?.name">
+          <MobContentItem
+            class="content-item"
+            :content="contentItem"
+            @change-content-item="changeContentItem"
+          />
+        </div>
       </div>
     </template>
+    <!-- </Transition> -->
     <el-button
       circle
       class="addGroupContentBtn"
@@ -61,13 +65,17 @@
       ref="drawerRef"
       v-model="addContentForm"
       title="添加密码"
-      direction="ttb"
+      direction="btt"
       custom-class="demo-drawer"
-      size="40%"
+      size="50%"
     >
       <div class="addContentToGroup">
         <el-form :model="contentForm">
-          <el-form-item label="Name" label-width="50%">
+          <el-form-item
+            label="Name"
+            label-width="50%"
+            class="add-content-formitem"
+          >
             <el-input
               v-model="contentForm.name"
               autocomplete="off"
@@ -75,6 +83,8 @@
               :disabled="ifdisabled"
             />
           </el-form-item>
+          <el-divider />
+
           <div>
             <div class="slider-demo-block">
               <span class="demonstration">密码长度</span>
@@ -86,6 +96,8 @@
                 :max="128"
               />
             </div>
+            <el-divider />
+
             <div class="passwordStrongSet">
               <span class="passwordNumbers"
                 >0-9 <el-switch v-model="passwordNumbers"
@@ -108,6 +120,7 @@
           </div>
           <el-form-item label="Password" label-width="50%">
             <el-input
+              class="add-content-formitem"
               v-model="contentForm.content"
               autocomplete="off"
               placeholder="Please input password"
@@ -139,6 +152,7 @@ import {
   changeGroupContent,
   postGroupContent
 } from '@/service/content/postcontent'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   components: {
@@ -273,6 +287,18 @@ export default defineComponent({
           contentForm.name
         )
       }
+      const oInput = document.createElement('input')
+      oInput.value = contentForm.content
+      document.body.appendChild(oInput)
+      oInput.select()
+      document.execCommand('Copy')
+      ElMessage({
+        center: true,
+        message: '复制成功',
+        type: 'success'
+      })
+      oInput.remove()
+      console.log('COPY')
       addContentForm.value = false
       const openFullScreen = () => {
         const loading = ElLoading.service({
@@ -355,4 +381,22 @@ export default defineComponent({
     top: auto;
   }
 }
+
+.passwordStrongSet {
+  display: flex;
+  flex-direction: flex-direction;
+  justify-content: space-between;
+}
+// .fade-enter-active {
+//   transition: all 0.3s ease-out;
+// }
+
+// .fade-leave-active {
+//   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+// }
+
+// .fade-enter-from {
+//   transform: translateX(20px);
+//   opacity: 0;
+// }
 </style>

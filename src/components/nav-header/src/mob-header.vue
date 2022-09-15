@@ -1,14 +1,9 @@
 <template>
   <div class="mob-header">
     <h2>密码库</h2>
-    <!-- <div class="mob-header-nodeinfo">
-      <el-button circle size="middle">
-        <el-icon size="15px"><User /></el-icon>
-      </el-button>
-    </div> -->
     <div class="mob-header-search">
-      <el-button circle size="large">
-        <el-icon size="20px"><Search /></el-icon>
+      <el-button circle size="large" @click="nodeInfoDialog = true">
+        <el-icon size="20px"><User /></el-icon>
       </el-button>
     </div>
     <div class="mob-header-more">
