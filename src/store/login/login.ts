@@ -3,16 +3,18 @@ import { ILoginState } from './types'
 import { IRootState } from '../types'
 import { getNodeInfo, startQuorum } from '@/utils/quorum-wasm/load-quorum'
 import { IBootstrap } from '@/views/login/config/node-config'
-import { IGroupsInfo, INodeInfo } from '@/utils/quorum-wasm/types'
+import { IGroupsInfo, INetworkInfo, INodeInfo } from '@/utils/quorum-wasm/types'
 import router from '@/router'
 import { isMobile } from '@/global/isMobile'
 import { getGroups } from '@/service/groups/getgroups'
+import getNetworkInfo from '@/service/network/getnetworkinfo'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
   state() {
     return {
       nodeLoading: false,
+      networkInfo: {},
       nodeInfo: {},
       groupsInfo: {}
     }
@@ -28,6 +30,9 @@ const loginModule: Module<ILoginState, IRootState> = {
       const nodeInfo: INodeInfo = await getNodeInfo()
       commit('changeNodeInfo', nodeInfo)
       localStorage.setItem('nodeInfo', JSON.stringify(nodeInfo))
+      const networkInfo: INetworkInfo = await getNetworkInfo()
+      commit('changeNetwork', networkInfo)
+      localStorage.setItem('networkInfo', JSON.stringify(networkInfo))
       // 请求组信息
       const groupsInfo: IGroupsInfo = await getGroups()
       commit('changeGroupsInfo', groupsInfo)
@@ -50,6 +55,9 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeNodeLoading(state, loading: boolean) {
       state.nodeLoading = loading
+    },
+    changeNetwork(state, networkInfo: INetworkInfo) {
+      state.networkInfo = networkInfo
     }
   },
   getters: {}

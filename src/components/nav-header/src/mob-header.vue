@@ -16,8 +16,10 @@
             <el-dropdown-item @click="nodeInfoDialog = true"
               >节点信息</el-dropdown-item
             >
-            <el-dropdown-item>同步</el-dropdown-item>
-            <el-dropdown-item>Action 3</el-dropdown-item>
+            <el-dropdown-item @click="groupstartSync">同步</el-dropdown-item>
+            <el-dropdown-item @click="networkDialog = true"
+              >网络信息</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -49,21 +51,78 @@
         </template>
       </template>
     </el-dialog>
+
+    <el-dialog
+      v-model="networkDialog"
+      title="Network信息"
+      width="90%"
+      destroy-on-close
+      center
+      draggable
+    >
+      <template v-for="(val, key) in networkInfo" :key="key">
+        <div v-if="key !== 'addrs' && key !== 'groups'">
+          <span class="nodeinfo-key">{{ key }}:</span>
+          <span class="nodeinfo-val" style="color: yellowgreen">{{ val }}</span>
+        </div>
+        <template v-else-if="key === 'groups'">
+          <div>
+            <span class="nodeinfo-key">{{ key }}: </span>
+            <span class="nodeinfo-val">
+              <template v-for="(v, k) in val" :key="k">
+                <span>{{ k }} : </span>
+                <span style="color: yellowgreen">{{ v }}</span>
+              </template>
+            </span>
+          </div>
+        </template>
+        <template v-else-if="key === 'addrs'">
+          <div>
+            <span class="nodeinfo-key">{{ key }}: </span>
+            <span class="nodeinfo-val">
+              <template v-for="(v, k) in val" :key="k">
+                <span>{{ k }} : </span>
+                <span style="color: yellowgreen">{{ v }}</span>
+              </template>
+            </span>
+          </div>
+        </template>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { INodeInfo } from '@/utils/quorum-wasm/types'
-import { defineComponent, reactive, ref } from 'vue'
+import { INetworkInfo, INodeInfo } from '@/utils/quorum-wasm/types'
+import { defineComponent, reactive, ref, computed } from 'vue'
 import localCache from '@/utils/cache/cache'
+import { useStore } from '@/store'
+import groupStartSync from '@/service/network/groupstartsync'
 
 export default defineComponent({
   setup() {
     const nodeInfoDialog = ref(false)
+    const networkDialog = ref(false)
+    const store = useStore()
 
     const nodeInfo: INodeInfo = reactive(localCache.getCache('nodeInfo') ?? '')
-
-    return { nodeInfoDialog, nodeInfo }
+    const networkInfo: INetworkInfo = reactive(
+      localCache.getCache('networkInfo') ?? ''
+    )
+    const selectGroupId = computed(() => store.state.main.groupId)
+    const groupstartSync = () => {
+      if (!selectGroupId.value) {
+        alert('Please select group')
+      }
+      groupStartSync(selectGroupId.value)
+    }
+    return {
+      nodeInfoDialog,
+      networkDialog,
+      networkInfo,
+      nodeInfo,
+      groupstartSync
+    }
   }
 })
 </script>

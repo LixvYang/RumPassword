@@ -109,3 +109,22 @@ export interface Target {
   id?: string
   type?: string
 }
+
+export interface INetworkInfo {
+  peer_id?: string
+  eth_addr?: string
+  nat_type?: string
+  nat_enabled?: boolean
+  addrs?: string[]
+  groups?: Group[]
+  node?: Node
+}
+
+export interface Group {
+  GroupId?: string
+  GroupName?: string
+  Peers?: null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Node {}

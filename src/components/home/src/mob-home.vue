@@ -4,12 +4,24 @@
       <div>
         <el-menu class="el-menu-vertical">
           <template v-for="(group, index) of groups" :key="group">
-            <el-menu-item
-              :index="index + ''"
-              @click="handleMenuItemClick(group.group_id)"
-            >
-              <span>{{ group.group_name }}</span>
-            </el-menu-item>
+            <div class="el-menu-item-fa">
+              <el-menu-item
+                :index="index + ''"
+                @click="handleMenuItemClick(group.group_id)"
+                class="el-menu-item"
+              >
+                <span>{{ group.group_name }}</span>
+                <el-button
+                  circle
+                  @click.stop="handleDeleteGroupBtn(group.group_id)"
+                  class="delete-group-btn"
+                >
+                  <el-icon style="vertical-align: middle" color="#F56C6C"
+                    ><Delete
+                  /></el-icon>
+                </el-button>
+              </el-menu-item>
+            </div>
           </template>
         </el-menu>
       </div>
@@ -153,6 +165,7 @@ import {
   postGroupContent
 } from '@/service/content/postcontent'
 import { ElMessage } from 'element-plus'
+import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
 
 export default defineComponent({
   components: {
@@ -332,6 +345,22 @@ export default defineComponent({
       data()
     }
 
+    const handleDeleteGroupBtn = (group_id: string | undefined) => {
+      store.commit('main/changeGroupContent', [])
+      store.commit('main/clearNewGroupContent')
+      const data = async () => {
+        clearGroup(group_id)
+          .then(async () => {
+            leaveGroup(group_id).then(async () => {
+              const groupsInfo: IGroupsInfo = await getGroups()
+              store.commit('login/changeGroupsInfo', groupsInfo)
+            })
+          })
+          .catch((e) => console.log(e))
+      }
+      data()
+    }
+
     return {
       DisplayGroupContent,
       handleMenuItemClick,
@@ -353,7 +382,8 @@ export default defineComponent({
       cancelContenteForm,
       generatePassword,
       loading,
-      onClick
+      onClick,
+      handleDeleteGroupBtn
     }
   }
 })
@@ -387,6 +417,20 @@ export default defineComponent({
   flex-direction: flex-direction;
   justify-content: space-between;
 }
+.el-menu-item-fa {
+  position: relative;
+  display: flex;
+  flex-direction: flex-direction;
+  justify-content: space-between;
+  .el-menu-item {
+    position: relative;
+    .delete-group-btn {
+      position: absolute;
+      left: 400%;
+    }
+  }
+}
+
 // .fade-enter-active {
 //   transition: all 0.3s ease-out;
 // }

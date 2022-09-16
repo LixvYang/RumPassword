@@ -6,6 +6,7 @@
     </div>
     <el-menu class="el-menu-vertical">
       <template v-for="(group, index) of groups" :key="group" v-if="!collapse">
+        <div></div>
         <el-menu-item
           :index="index + ''"
           @click="handleMenuItemClick(group.group_id)"
