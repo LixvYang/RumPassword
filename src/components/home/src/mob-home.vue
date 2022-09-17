@@ -1,153 +1,6 @@
 <template>
   <div class="mob-home">
-    <template v-if="!DisplayGroupContent">
-      <div>
-        <el-menu class="el-menu-vertical">
-          <template v-for="(group, index) of groups" :key="group">
-            <div class="el-menu-item-fa">
-              <el-menu-item
-                :index="index + ''"
-                @click="handleMenuItemClick(group.group_id)"
-                class="el-menu-item"
-              >
-                <span>{{ group.group_name }}</span>
-                <el-button
-                  circle
-                  @click.stop="handleDeleteGroupBtn(group.group_id)"
-                  class="delete-group-btn"
-                >
-                  <el-icon style="vertical-align: middle" color="#F56C6C"
-                    ><Delete
-                  /></el-icon>
-                </el-button>
-              </el-menu-item>
-            </div>
-          </template>
-        </el-menu>
-      </div>
-    </template>
-    <!-- <Transition name="fade"> -->
-    <template v-if="DisplayGroupContent">
-      <div>
-        <div class="group-content-header">
-          <el-button size="large" @click="handleDisplayGroup" circle>
-            <el-icon color="#409EFF"><Back /></el-icon>
-          </el-button>
-          <p class="group-content-header-name">{{ groupName }}</p>
-        </div>
-        <el-divider />
-        <div v-for="contentItem in groupContent" :key="contentItem?.name">
-          <MobContentItem
-            class="content-item"
-            :content="contentItem"
-            @change-content-item="changeContentItem"
-          />
-        </div>
-      </div>
-    </template>
-    <!-- </Transition> -->
-    <el-button
-      circle
-      class="addGroupContentBtn"
-      size="large"
-      type="primary"
-      @click="handleAddContent"
-      ><el-icon color="#95d475"><Plus /></el-icon
-    ></el-button>
-
-    <el-drawer v-model="addGroupDrawer" :with-header="false" direction="btt">
-      <h1>创建组</h1>
-      <el-input
-        v-model="createGroupName"
-        placeholder="Please input group name"
-      ></el-input>
-      <template #footer>
-        <div style="flex: auto">
-          <el-button @click="addGroupDrawer = !addGroupDrawer"
-            >cancel</el-button
-          >
-          <el-button type="primary" @click="handleAddGroupBtn(createGroupName)"
-            >confirm</el-button
-          >
-        </div>
-      </template>
-    </el-drawer>
-
-    <el-drawer
-      ref="drawerRef"
-      v-model="addContentForm"
-      title="添加密码"
-      direction="btt"
-      custom-class="demo-drawer"
-      size="50%"
-    >
-      <div class="addContentToGroup">
-        <el-form :model="contentForm">
-          <el-form-item
-            label="Name"
-            label-width="50%"
-            class="add-content-formitem"
-          >
-            <el-input
-              v-model="contentForm.name"
-              autocomplete="off"
-              placeholder="Please input name"
-              :disabled="ifdisabled"
-            />
-          </el-form-item>
-          <el-divider />
-
-          <div>
-            <div class="slider-demo-block">
-              <span class="demonstration">密码长度</span>
-              <el-slider
-                v-model="passwordLen"
-                show-input
-                size="small"
-                :min="5"
-                :max="128"
-              />
-            </div>
-            <el-divider />
-
-            <div class="passwordStrongSet">
-              <span class="passwordNumbers"
-                >0-9 <el-switch v-model="passwordNumbers"
-              /></span>
-              <span class="passwordSymbols"
-                >!@#$%^&*<el-switch v-model="passwordSymbols"
-              /></span>
-              <span
-                >生成<el-button
-                  @click="
-                    generatePassword(
-                      passwordLen,
-                      passwordNumbers,
-                      passwordSymbols
-                    )
-                  "
-                  ><el-icon><Refresh /></el-icon></el-button
-              ></span>
-            </div>
-          </div>
-          <el-form-item label="Password" label-width="50%">
-            <el-input
-              class="add-content-formitem"
-              v-model="contentForm.content"
-              autocomplete="off"
-              placeholder="Please input password"
-              show-password
-            />
-          </el-form-item>
-        </el-form>
-        <div class="demo-drawer__footer">
-          <el-button @click="cancelContenteForm">Cancel</el-button>
-          <el-button type="primary" :loading="loading" @click="onClick">{{
-            loading ? 'Submitting ...' : 'Submit'
-          }}</el-button>
-        </div>
-      </div>
-    </el-drawer>
+    <component :is="component"></component>
   </div>
 </template>
 
@@ -166,10 +19,14 @@ import {
 } from '@/service/content/postcontent'
 import { ElMessage } from 'element-plus'
 import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
+import MobHomeContent from '@/components/home/cpns/mob-home-content.vue'
+import MobHomeGroup from '@/components/home/cpns/mob-home-groups.vue'
 
 export default defineComponent({
   components: {
-    MobContentItem
+    // MobContentItem
+    MobHomeContent,
+    MobHomeGroup
   },
   setup() {
     const store = useStore()
@@ -182,6 +39,7 @@ export default defineComponent({
       content: '',
       name: ''
     })
+    const component = ref(MobHomeGroup)
     const addGroupDrawer = ref(false)
     const createGroupName = ref('')
     const passwordLen = ref(12)
@@ -192,7 +50,12 @@ export default defineComponent({
 
     const handleMenuItemClick = (group_id: string | undefined) => {
       DisplayGroupContent.value = !DisplayGroupContent.value
-      store.dispatch('main/handleGroupIdAction', group_id)
+      if (!DisplayGroupContent.value) {
+        component.value = MobHomeContent
+      } else {
+        component.value = MobHomeGroup
+      }
+      // store.dispatch('main/handleGroupIdAction', group_id)
     }
 
     const groupContent: ComputedRef<NewContent[]> = computed(
@@ -383,7 +246,8 @@ export default defineComponent({
       generatePassword,
       loading,
       onClick,
-      handleDeleteGroupBtn
+      handleDeleteGroupBtn,
+      component
     }
   }
 })
@@ -430,17 +294,4 @@ export default defineComponent({
     }
   }
 }
-
-// .fade-enter-active {
-//   transition: all 0.3s ease-out;
-// }
-
-// .fade-leave-active {
-//   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-// }
-
-// .fade-enter-from {
-//   transform: translateX(20px);
-//   opacity: 0;
-// }
 </style>
