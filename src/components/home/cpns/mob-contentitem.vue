@@ -33,7 +33,6 @@ import { ElMessage } from 'element-plus'
 import { delGroupContent } from '@/service/content/delcontent'
 import { useStore } from '@/store'
 import { getGroupContent } from '@/service/content/getcontent'
-import { emit } from 'process'
 
 export default defineComponent({
   props: {

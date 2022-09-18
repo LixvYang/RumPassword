@@ -7,21 +7,16 @@
 </template>
 
 <script lang="ts">
+import { RumLoading } from '@/global/loading'
 import store from '@/store'
-import { ElLoading } from 'element-plus'
 import { defineComponent } from 'vue'
 import { bootstrapsForm } from '../config/node-config'
 
 export default defineComponent({
   setup() {
     const loginAction = () => {
-      const loading = ElLoading.service({
-        lock: true,
-        text: '正在请求数据...',
-        background: 'rgba(0, 0, 0, 0.5)'
-      })
+      RumLoading(true, 'Node Running...')
       store.dispatch('login/nodeLoginAction', bootstrapsForm)
-      loading.close()
     }
     return {
       loginAction
@@ -41,10 +36,12 @@ export default defineComponent({
   background-image: url('../../../assets/img/rumbig.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 90%;
+  background-size: 100%;
+  background-color: rgb(82, 76, 76);
   .login-btn {
     padding: 0.9em 2em;
     position: relative;
+    top: 30%;
     border: none;
     outline: none;
     color: rgb(255, 255, 255);

@@ -28,18 +28,5 @@ export default defineComponent({
     color: rgb(255, 255, 255);
     background-color: #79bbff;
   }
-  // .mob-home {
-  //   position: relative;
-  //   height: 100%;
-  //   width: 100%;
-  //   color: aquamarine;
-  //   // background-color: rgb(56, 175, 54);
-  // }
-  // .mob-footer {
-  //   position: relative;
-  //   width: 100%;
-  //   color: aquamarine;
-  //   // background-color: red;
-  // }
 }
 </style>

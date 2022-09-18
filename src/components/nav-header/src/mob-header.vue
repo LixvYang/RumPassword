@@ -13,9 +13,6 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="nodeInfoDialog = true"
-              >节点信息</el-dropdown-item
-            >
             <el-dropdown-item @click="groupstartSync">同步</el-dropdown-item>
             <el-dropdown-item @click="networkDialog = true"
               >网络信息</el-dropdown-item

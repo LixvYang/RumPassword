@@ -37,7 +37,7 @@
         </el-tooltip>
         <el-button @click="loginAction">运行</el-button>
         <el-button @click="dialogFormVisible = !dialogFormVisible"
-          >确定</el-button
+          >cancel</el-button
         >
       </template>
     </el-dialog>
@@ -51,6 +51,7 @@ import BootStrap from './bootstraps/bootstrap.vue'
 import { ElLoading, ElNotification } from 'element-plus'
 import localCache from '@/utils/cache/cache'
 import { IBootstrap, bootstrapsForm } from '../config/node-config'
+import { RumLoading } from '@/global/loading'
 
 export default defineComponent({
   components: {
@@ -60,9 +61,7 @@ export default defineComponent({
     const store = useStore()
 
     const dialogFormVisible = ref(false)
-    const form: IBootstrap = reactive(
-      localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY') ?? bootstrapsForm
-    )
+    const form: IBootstrap = reactive(bootstrapsForm)
 
     const recoverForm = () => {
       if (localCache.getCache('WASM_BOOTSTRAP_STORAGE_KEY')) {
@@ -108,13 +107,8 @@ export default defineComponent({
       }
       localCache.setCache('WASM_BOOTSTRAP_STORAGE_KEY', form.bootstraps)
 
-      const loading = ElLoading.service({
-        lock: true,
-        text: '正在请求数据...',
-        background: 'rgba(0, 0, 0, 0.5)'
-      })
+      RumLoading(true, 'Node runing...')
       store.dispatch('login/nodeLoginAction', { ...form })
-      loading.close()
     }
 
     watch(form, (oldValue, newValue) => {

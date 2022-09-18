@@ -164,7 +164,7 @@ export default defineComponent({
       const openFullScreen = () => {
         const loading = ElLoading.service({
           lock: true,
-          text: '等待以下喔',
+          text: '等待以下喔,数据正在上链',
           background: 'rgba(0, 0, 0, 0.7)'
         })
         setTimeout(() => {
