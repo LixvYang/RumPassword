@@ -1,51 +1,13 @@
 <template>
   <div class="mob-home">
-    <template v-if="!DisplayGroupContent">
-      <div>
-        <el-menu class="el-menu-vertical">
-          <template v-for="(group, index) of groups" :key="group">
-            <div class="el-menu-item-fa">
-              <el-menu-item
-                :index="index + ''"
-                @click="handleMenuItemClick(group.group_id)"
-                class="el-menu-item"
-              >
-                <span>{{ group.group_name }}</span>
-                <el-button
-                  circle
-                  @click.stop="handleDeleteGroupBtn(group.group_id)"
-                  class="delete-group-btn"
-                >
-                  <el-icon style="vertical-align: middle" color="#F56C6C"
-                    ><Delete
-                  /></el-icon>
-                </el-button>
-              </el-menu-item>
-            </div>
-          </template>
-        </el-menu>
-      </div>
-    </template>
-    <!-- <Transition name="fade"> -->
-    <template v-if="DisplayGroupContent">
-      <div>
-        <div class="group-content-header">
-          <el-button size="large" @click="handleDisplayGroup" circle>
-            <el-icon color="#409EFF"><Back /></el-icon>
-          </el-button>
-          <p class="group-content-header-name">{{ groupName }}</p>
-        </div>
-        <el-divider />
-        <div v-for="contentItem in groupContent" :key="contentItem?.name">
-          <MobContentItem
-            class="content-item"
-            :content="contentItem"
-            @change-content-item="changeContentItem"
-          />
-        </div>
-      </div>
-    </template>
-    <!-- </Transition> -->
+    <component
+      :is="component"
+      v-model:ifDisplayContent="ifDisplayContent"
+      v-model:ifdisabled="ifdisabled"
+      v-model:addContentForm="addContentForm"
+      @update:handleAddContent="handleAddContent"
+      @changeContentFormName="changeContentFormName"
+    ></component>
     <el-button
       circle
       class="addGroupContentBtn"
@@ -80,6 +42,7 @@
       direction="btt"
       custom-class="demo-drawer"
       size="50%"
+      :before-close="handleDrawerClose"
     >
       <div class="addContentToGroup">
         <el-form :model="contentForm">
@@ -154,9 +117,8 @@
 <script lang="ts">
 import { createGroup, getGroups } from '@/service/groups/creategroup'
 import { useStore } from '@/store'
-import { IGroupsInfo, NewContent } from '@/utils/quorum-wasm/types'
-import { computed, ComputedRef, defineComponent, reactive, ref } from 'vue'
-import MobContentItem from '../cpns/mob-contentitem.vue'
+import { IGroupsInfo } from '@/utils/quorum-wasm/types'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 import generator from 'generate-password'
 import { ElDrawer, ElLoading } from 'element-plus'
 import { getGroupContent } from '@/service/content/getcontent'
@@ -165,16 +127,18 @@ import {
   postGroupContent
 } from '@/service/content/postcontent'
 import { ElMessage } from 'element-plus'
-import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
+import MobHomeContent from '@/components/home/cpns/mob-home-content.vue'
+import MobHomeGroups from '@/components/home/cpns/mob-home-groups.vue'
 
 export default defineComponent({
   components: {
-    MobContentItem
+    MobHomeContent,
+    MobHomeGroups
   },
   setup() {
     const store = useStore()
     const drawerRef = ref<InstanceType<typeof ElDrawer>>()
-    const DisplayGroupContent = ref(false)
+    const ifDisplayContent = ref(false)
     const groups = computed(() => store.state.login.groupsInfo.groups)
     const ifdisabled = ref(false)
     const addContentForm = ref(false)
@@ -182,42 +146,35 @@ export default defineComponent({
       content: '',
       name: ''
     })
+    const component = ref('MobHomeGroups')
     const addGroupDrawer = ref(false)
     const createGroupName = ref('')
+    const curProps = ref({})
     const passwordLen = ref(12)
     const passwordNumbers = ref(true)
     const passwordSymbols = ref(false)
     const loading = ref(false)
     const selectGroupId = computed(() => store.state.main.groupId)
+    const contentRef = ref('')
 
-    const handleMenuItemClick = (group_id: string | undefined) => {
-      DisplayGroupContent.value = !DisplayGroupContent.value
-      store.dispatch('main/handleGroupIdAction', group_id)
-    }
-
-    const groupContent: ComputedRef<NewContent[]> = computed(
-      () => store.state.main.newGroupContent
-    )
-
-    const groupName = computed(() => store.state.main.groupName)
-
-    const changeContentItem = (changeContentItemName: string) => {
-      contentForm.name = changeContentItemName
-      ifdisabled.value = true
-      addContentForm.value = true
-    }
-
-    const handleDisplayGroup = () => {
-      DisplayGroupContent.value = !DisplayGroupContent.value
-    }
+    watch(ifDisplayContent, (newValue: boolean, oldValue: boolean) => {
+      if (newValue === true) {
+        component.value = 'MobHomeContent'
+      } else {
+        component.value = 'MobHomeGroups'
+      }
+    })
 
     const handleAddContent = () => {
-      if (DisplayGroupContent.value === false) {
+      if (ifDisplayContent.value === false) {
         // add group
         addGroupDrawer.value = !addGroupDrawer.value
-      } else {
-        addContentForm.value = !addContentForm.value
-        ifdisabled.value = false
+      } else if (ifdisabled.value === false) {
+        addContentForm.value = true
+        contentForm.name = ''
+      } else if (ifdisabled.value === true) {
+        contentForm.name == contentRef.value
+        addContentForm.value = true
       }
     }
 
@@ -228,7 +185,6 @@ export default defineComponent({
         createGroup(createGroupName)
           .then(async () => {
             const groupsInfo: IGroupsInfo = await getGroups()
-            console.log(groupsInfo)
             store.commit('login/changeGroupsInfo', groupsInfo)
           })
           .catch((err) => {
@@ -239,8 +195,13 @@ export default defineComponent({
       addGroupDrawer.value = !addGroupDrawer.value
     }
 
+    const changeContentFormName = (name: string) => {
+      contentForm.name = name
+    }
+
     const cancelContenteForm = () => {
       loading.value = false
+      ifdisabled.value = false
       addContentForm.value = false
       contentForm.content = ''
       contentForm.name = ''
@@ -252,13 +213,20 @@ export default defineComponent({
       passwordNumbers: boolean,
       passwordSymbols: boolean
     ) {
-      console.log('发送generatePassword')
       const password = generator.generate({
         length: passwordLen,
         numbers: passwordNumbers,
         symbols: passwordSymbols
       })
       contentForm.content = password
+    }
+
+    const handleDrawerClose = () => {
+      if (ifdisabled.value === true) {
+        contentForm.name = ''
+        ifdisabled.value = true
+      }
+      cancelContenteForm()
     }
 
     const onClick = () => {
@@ -311,7 +279,6 @@ export default defineComponent({
         type: 'success'
       })
       oInput.remove()
-      console.log('COPY')
       addContentForm.value = false
       const openFullScreen = () => {
         const loading = ElLoading.service({
@@ -328,7 +295,7 @@ export default defineComponent({
             'main/handleGroupIdAction',
             selectGroupId.value.toString()
           )
-        }, 20000)
+        }, 25000)
       }
       const data = async () => {
         getGroupContent(selectGroupId.value.toString()).then(
@@ -341,34 +308,13 @@ export default defineComponent({
           }
         )
       }
-
-      data()
-    }
-
-    const handleDeleteGroupBtn = (group_id: string | undefined) => {
-      store.commit('main/changeGroupContent', [])
-      store.commit('main/clearNewGroupContent')
-      const data = async () => {
-        clearGroup(group_id)
-          .then(async () => {
-            leaveGroup(group_id).then(async () => {
-              const groupsInfo: IGroupsInfo = await getGroups()
-              store.commit('login/changeGroupsInfo', groupsInfo)
-            })
-          })
-          .catch((e) => console.log(e))
-      }
       data()
     }
 
     return {
-      DisplayGroupContent,
-      handleMenuItemClick,
+      ifDisplayContent,
+      curProps,
       groups,
-      groupContent,
-      changeContentItem,
-      groupName,
-      handleDisplayGroup,
       handleAddContent,
       addGroupDrawer,
       createGroupName,
@@ -383,33 +329,19 @@ export default defineComponent({
       generatePassword,
       loading,
       onClick,
-      handleDeleteGroupBtn
+      component,
+      changeContentFormName,
+      handleDrawerClose
     }
   }
 })
 </script>
 
 <style scoped lang="less">
-.content-item {
-  display: flex;
-  height: 10%;
-}
 .addGroupContentBtn {
   position: absolute;
   top: 93%;
   left: 88%;
-}
-.group-content-header {
-  display: flex;
-  width: 100%;
-  height: 10%;
-
-  .group-content-header-name {
-    margin: auto;
-    left: 50%;
-    font-size: x-large;
-    top: auto;
-  }
 }
 
 .passwordStrongSet {
@@ -417,30 +349,12 @@ export default defineComponent({
   flex-direction: flex-direction;
   justify-content: space-between;
 }
-.el-menu-item-fa {
-  position: relative;
+
+.demo-drawer__footer {
   display: flex;
   flex-direction: flex-direction;
   justify-content: space-between;
-  .el-menu-item {
-    position: relative;
-    .delete-group-btn {
-      position: absolute;
-      left: 400%;
-    }
-  }
+  position: absolute;
+  right: 20%;
 }
-
-// .fade-enter-active {
-//   transition: all 0.3s ease-out;
-// }
-
-// .fade-leave-active {
-//   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-// }
-
-// .fade-enter-from {
-//   transform: translateX(20px);
-//   opacity: 0;
-// }
 </style>

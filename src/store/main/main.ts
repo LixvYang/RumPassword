@@ -17,9 +17,8 @@ const mainModule: Module<IMainState, IRootState> = {
   },
   actions: {
     async handleGroupIdAction({ commit, dispatch }, payload: string) {
-      // const store = useStore()
-      // const groupId = computed(() => store.state.main.groupId)
       commit('clearNewGroupContent')
+      commit('clearNewGroupName')
       const groupContent: GroupContent<Content>[] = await getGroupContent(
         payload
       )
@@ -40,6 +39,9 @@ const mainModule: Module<IMainState, IRootState> = {
   mutations: {
     clearNewGroupContent(state) {
       state.newGroupContent = []
+    },
+    clearNewGroupName(state) {
+      state.groupName = ''
     },
     changeGroupContent(state, groupContent: GroupContent[]) {
       state.groupContent = groupContent

@@ -31,6 +31,8 @@ declare module '@vue/runtime-core' {
     MobContentitem: typeof import('./src/components/home/cpns/mob-contentitem.vue')['default']
     MobHeader: typeof import('./src/components/nav-header/src/mob-header.vue')['default']
     MobHome: typeof import('./src/components/home/src/mob-home.vue')['default']
+    MobHomeContent: typeof import('./src/components/home/cpns/mob-home-content.vue')['default']
+    MobHomeGroups: typeof import('./src/components/home/cpns/mob-home-groups.vue')['default']
     NavHeader: typeof import('./src/components/nav-header/src/nav-header.vue')['default']
     NavMenu: typeof import('./src/components/nav-menu/src/nav-menu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
