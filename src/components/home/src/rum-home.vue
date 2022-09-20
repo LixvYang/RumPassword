@@ -133,9 +133,9 @@ export default defineComponent({
         let changeTrxId: string | undefined = ''
         getGroupContent(selectedGroupid.value)
           .then((groupContent) => {
-            for (let i = groupContent.length - 1; i >= 0; i--) {
-              if (groupContent[i].Content?.name == contentForm.name) {
-                changeTrxId = groupContent[i].TrxId
+            for (let i = groupContent.data.length - 1; i >= 0; i--) {
+              if (groupContent.data[i].Content?.name == contentForm.name) {
+                changeTrxId = groupContent.data[i].TrxId
               }
             }
           })

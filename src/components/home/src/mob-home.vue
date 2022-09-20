@@ -256,9 +256,9 @@ export default defineComponent({
         let changeTrxId: string | undefined = ''
         getGroupContent(selectedGroupid.value, groupContent.value[0].TrxId)
           .then((groupContent) => {
-            for (let i = groupContent.length - 1; i >= 0; i--) {
-              if (groupContent[i].Content?.name == contentForm.name) {
-                changeTrxId = groupContent[i].TrxId
+            for (let i = groupContent.data.length - 1; i >= 0; i--) {
+              if (groupContent.data[i].Content?.name == contentForm.name) {
+                changeTrxId = groupContent.data[i].TrxId
               }
             }
           })
@@ -298,7 +298,7 @@ export default defineComponent({
       const openFullScreen = () => {
         const loading = ElLoading.service({
           lock: true,
-          text: '等待以下喔',
+          text: '数据正在上链...',
           background: 'rgba(0, 0, 0, 0.7)'
         })
         setTimeout(() => {
@@ -310,7 +310,7 @@ export default defineComponent({
             'main/handleGroupIdAction',
             selectGroupId.value.toString()
           )
-        }, 25000)
+        }, 20000)
       }
       const data = async () => {
         getGroupContent(selectGroupId.value.toString()).then(

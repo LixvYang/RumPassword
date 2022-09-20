@@ -56,6 +56,10 @@ export interface Group {
   snapshot_info?: null
 }
 
+export interface GroupContentData<T = any> {
+  data: GroupContent<T>[]
+}
+
 export interface GroupContent<T = any> {
   TrxId?: string
   Publisher?: string
