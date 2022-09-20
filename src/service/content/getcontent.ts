@@ -1,4 +1,8 @@
-import { Content, GroupContent } from '@/utils/quorum-wasm/types'
+import {
+  Content,
+  GroupContent,
+  GroupContentData
+} from '@/utils/quorum-wasm/types'
 import rumrequest from '..'
 import { getGroupContent as getContent } from '@/utils/quorum-wasm/load-quorum'
 
@@ -19,7 +23,7 @@ export async function getGroupContent(group_id: string, startTrx?: string) {
   //   reverse: false,
   //   includestarttrx: true
   // })
-  const res: GroupContent[] = await GetContent(
+  const res: GroupContentData = await GetContent(
     group_id,
     100,
     '',

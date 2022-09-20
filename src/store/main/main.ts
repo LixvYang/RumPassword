@@ -1,7 +1,12 @@
 import { Module } from 'vuex'
 import { IRootState } from '../types'
 import { IMainState } from './types'
-import { GroupContent, Content, NewContent } from '@/utils/quorum-wasm/types'
+import {
+  GroupContent,
+  Content,
+  NewContent,
+  GroupContentData
+} from '@/utils/quorum-wasm/types'
 import { getGroupContent } from '@/service/content/getcontent'
 
 const mainModule: Module<IMainState, IRootState> = {
@@ -19,9 +24,7 @@ const mainModule: Module<IMainState, IRootState> = {
     async handleGroupIdAction({ commit, dispatch }, payload: string) {
       commit('clearNewGroupContent')
       commit('clearNewGroupName')
-      const groupContent: GroupContent<Content>[] = await getGroupContent(
-        payload
-      )
+      const groupContent: GroupContentData = await getGroupContent(payload)
       commit('changeGroupId', payload)
       dispatch('handleGroupName')
       commit('changeGroupContent', groupContent)
@@ -43,29 +46,24 @@ const mainModule: Module<IMainState, IRootState> = {
     clearNewGroupName(state) {
       state.groupName = ''
     },
-    changeGroupContent(state, groupContent: GroupContent[]) {
-      state.groupContent = groupContent
+    changeGroupContent(state, groupContent: GroupContentData) {
+      state.groupContent = groupContent.data
     },
     changeGroupId(state, groupId: string) {
       state.groupId = groupId
     },
-    changeNewGroupContent(state, groupContent: GroupContent[]) {
-      if (!groupContent) {
+    changeNewGroupContent(state, groupContentData: GroupContentData) {
+      if (!groupContentData) {
         console.log('groupContent 为空')
         return
       }
-      console.log(groupContent)
-      console.log(groupContent.length)
-      console.log(groupContent[0].Content)
+      const groupContent = groupContentData.data
       for (let i = 0; i < groupContent.length; i++) {
-        console.log('dddddd')
         if (!groupContent[i].Content?.id) {
-          console.log('dddddd')
           const NewContentend: NewContent = {
             name: groupContent[i]?.Content?.name,
             content: groupContent[i]?.Content?.content
           }
-          console.log(NewContentend)
           state.newGroupContent.push(NewContentend)
         } else if (
           groupContent[i]?.Content?.id &&
