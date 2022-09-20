@@ -26,7 +26,7 @@ export async function getNodeInfo(): Promise<any> {
 //   return res
 // }
 
-export async function getGroupContent(p: any): Promise<any> {
+export async function getGroupContent(...p: any): Promise<any> {
   return await GetContent(p)
 }
 

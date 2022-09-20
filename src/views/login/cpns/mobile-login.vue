@@ -37,7 +37,7 @@ export default defineComponent({
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
-  background-color: rgb(82, 76, 76);
+  background-color: rgb(59, 62, 64);
   .login-btn {
     padding: 0.9em 2em;
     position: relative;

@@ -48,8 +48,9 @@
 </template>
 
 <script lang="ts">
-import { getGroups } from '@/service/groups/creategroup'
+import { RumLoading } from '@/global/loading'
 import { clearGroup, leaveGroup } from '@/service/groups/deletegroup'
+import { getGroups } from '@/service/groups/getgroups'
 import { useStore } from '@/store'
 import { IGroupsInfo } from '@/utils/quorum-wasm/types'
 import { computed, defineComponent, ref } from 'vue'
@@ -77,14 +78,23 @@ export default defineComponent({
       selectDelGroupId.value = group_id ?? ''
     }
 
-    const handleDeleteGroupBtn = (group_id: string | undefined) => {
+    const handleDeleteGroupBtn = async (group_id: string | undefined) => {
       cancelDeleteGrp()
       store.commit('main/changeGroupContent', [])
       store.commit('main/clearNewGroupContent')
       const data = async () => {
-        clearGroup(group_id)
+        // await leaveGroup(group_id)
+        // await clearGroup(group_id)
+        // const groupsInfo: IGroupsInfo = await getGroups()
+        // store.commit('login/changeGroupsInfo', groupsInfo)
+        // await console.log('groupsInfo' + groupsInfo)
+        console.log('leaveGroup' + 'before')
+        leaveGroup(group_id)
           .then(async () => {
-            leaveGroup(group_id).then(async () => {
+            console.log('clearGroup' + 'after')
+            console.log('clearGroup' + 'before')
+            clearGroup(group_id).then(async () => {
+              console.log('clearGroup' + 'after')
               const groupsInfo: IGroupsInfo = await getGroups()
               store.commit('login/changeGroupsInfo', groupsInfo)
             })
@@ -92,6 +102,7 @@ export default defineComponent({
           .catch((e) => console.log(e))
       }
       data()
+      RumLoading(true, '正在上链中...', 2000)
     }
 
     const cancelDeleteGrp = () => {
