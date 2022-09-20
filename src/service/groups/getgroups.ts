@@ -5,8 +5,12 @@ enum GroupAPI {
   GetGroups = '/groups'
 }
 
+// export function getGroups() {
+//   return rumrequest.get<IGroupsInfo>({
+//     url: GroupAPI.GetGroups
+//   })
+// }
+
 export function getGroups() {
-  return rumrequest.get<IGroupsInfo>({
-    url: GroupAPI.GetGroups
-  })
+  return GetGroups()
 }

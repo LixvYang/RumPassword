@@ -54,12 +54,18 @@ const mainModule: Module<IMainState, IRootState> = {
         console.log('groupContent 为空')
         return
       }
+      console.log(groupContent)
+      console.log(groupContent.length)
+      console.log(groupContent[0].Content)
       for (let i = 0; i < groupContent.length; i++) {
+        console.log('dddddd')
         if (!groupContent[i].Content?.id) {
+          console.log('dddddd')
           const NewContentend: NewContent = {
             name: groupContent[i]?.Content?.name,
             content: groupContent[i]?.Content?.content
           }
+          console.log(NewContentend)
           state.newGroupContent.push(NewContentend)
         } else if (
           groupContent[i]?.Content?.id &&

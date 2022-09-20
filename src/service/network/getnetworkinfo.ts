@@ -5,9 +5,13 @@ enum NetworkAPI {
   GetNetworkInfo = '/network'
 }
 
+// export default function getNodeInfo() {
+//   return rumrequest.get<INetworkInfo>({
+//     url: NetworkAPI.GetNetworkInfo,
+//     showLoading: false
+//   })
+// }
+
 export default function getNodeInfo() {
-  return rumrequest.get<INetworkInfo>({
-    url: NetworkAPI.GetNetworkInfo,
-    showLoading: false
-  })
+  return GetNetwork()
 }

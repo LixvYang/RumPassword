@@ -6,35 +6,14 @@ enum ContentAPI {
   PostContent = '/group/content'
 }
 
-export function postGroupContent(
-  group_id: string | undefined,
-  content: string | undefined,
-  name: string | undefined
-) {
-  return rumrequest.post<PostContentToGroupParams>({
-    url: ContentAPI.PostContent,
-    data: {
-      type: 'Add',
-      object: {
-        type: 'Note',
-        content: content,
-        name: name
-      },
-      target: {
-        id: group_id,
-        type: 'Group'
-      }
-    }
-  })
-}
-
 // export function postGroupContent(
 //   group_id: string | undefined,
 //   content: string | undefined,
 //   name: string | undefined
 // ) {
-//   return postToGroup(
-//     JSON.stringify({
+//   return rumrequest.post<PostContentToGroupParams>({
+//     url: ContentAPI.PostContent,
+//     data: {
 //       type: 'Add',
 //       object: {
 //         type: 'Note',
@@ -45,23 +24,19 @@ export function postGroupContent(
 //         id: group_id,
 //         type: 'Group'
 //       }
-//     })
-//   )
+//     }
+//   })
 // }
 
-export function changeGroupContent(
-  trx_id: string | undefined,
+export function postGroupContent(
   group_id: string | undefined,
   content: string | undefined,
   name: string | undefined
 ) {
-  console.log('trx_id =' + trx_id)
-  return rumrequest.post({
-    url: ContentAPI.PostContent,
-    data: {
+  return postToGroup(
+    JSON.stringify({
       type: 'Add',
       object: {
-        id: trx_id,
         type: 'Note',
         content: content,
         name: name
@@ -70,8 +45,8 @@ export function changeGroupContent(
         id: group_id,
         type: 'Group'
       }
-    }
-  })
+    })
+  )
 }
 
 // export function changeGroupContent(
@@ -81,8 +56,9 @@ export function changeGroupContent(
 //   name: string | undefined
 // ) {
 //   console.log('trx_id =' + trx_id)
-//   return postToGroup(
-//     JSON.stringify({
+//   return rumrequest.post({
+//     url: ContentAPI.PostContent,
+//     data: {
 //       type: 'Add',
 //       object: {
 //         id: trx_id,
@@ -94,6 +70,30 @@ export function changeGroupContent(
 //         id: group_id,
 //         type: 'Group'
 //       }
-//     })
-//   )
+//     }
+//   })
 // }
+
+export function changeGroupContent(
+  trx_id: string | undefined,
+  group_id: string | undefined,
+  content: string | undefined,
+  name: string | undefined
+) {
+  console.log('trx_id =' + trx_id)
+  return postToGroup(
+    JSON.stringify({
+      type: 'Add',
+      object: {
+        id: trx_id,
+        type: 'Note',
+        content: content,
+        name: name
+      },
+      target: {
+        id: group_id,
+        type: 'Group'
+      }
+    })
+  )
+}

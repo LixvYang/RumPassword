@@ -115,10 +115,17 @@
 </template>
 
 <script lang="ts">
-import { createGroup, getGroups } from '@/service/groups/creategroup'
+import { createGroup } from '@/service/groups/creategroup'
 import { useStore } from '@/store'
-import { IGroupsInfo } from '@/utils/quorum-wasm/types'
-import { computed, defineComponent, reactive, ref, watch } from 'vue'
+import { Content, GroupContent, IGroupsInfo } from '@/utils/quorum-wasm/types'
+import {
+  computed,
+  ComputedRef,
+  defineComponent,
+  reactive,
+  ref,
+  watch
+} from 'vue'
 import generator from 'generate-password'
 import { ElDrawer, ElLoading } from 'element-plus'
 import { getGroupContent } from '@/service/content/getcontent'
@@ -129,6 +136,9 @@ import {
 import { ElMessage } from 'element-plus'
 import MobHomeContent from '@/components/home/cpns/mob-home-content.vue'
 import MobHomeGroups from '@/components/home/cpns/mob-home-groups.vue'
+import { getGroups } from '@/service/groups/getgroups'
+import { RumLoading } from '@/global/loading'
+import getNetworkInfo from '@/service/network/getnetworkinfo'
 
 export default defineComponent({
   components: {
@@ -156,6 +166,9 @@ export default defineComponent({
     const loading = ref(false)
     const selectGroupId = computed(() => store.state.main.groupId)
     const contentRef = ref('')
+    const groupContent: ComputedRef<GroupContent<Content>[]> = computed(
+      () => store.state.main.groupContent
+    )
 
     watch(ifDisplayContent, (newValue: boolean, oldValue: boolean) => {
       if (newValue === true) {
@@ -193,6 +206,8 @@ export default defineComponent({
       }
       data()
       addGroupDrawer.value = !addGroupDrawer.value
+      store.commit('login/changeNetwork', getNetworkInfo())
+      RumLoading(true, ' 请稍候正在创建组', 30000)
     }
 
     const changeContentFormName = (name: string) => {
@@ -239,7 +254,7 @@ export default defineComponent({
       if (ifdisabled.value === true) {
         const selectedGroupid = computed(() => store.state.main.groupId)
         let changeTrxId: string | undefined = ''
-        getGroupContent(selectedGroupid.value)
+        getGroupContent(selectedGroupid.value, groupContent.value[0].TrxId)
           .then((groupContent) => {
             for (let i = groupContent.length - 1; i >= 0; i--) {
               if (groupContent[i].Content?.name == contentForm.name) {
