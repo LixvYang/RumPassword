@@ -1,13 +1,21 @@
 import { Go } from './wasm_exec'
 import quorumWasmUrl from './lib.wasm'
 
+// const init = async () => {
+//   const go = new Go()
+//   const r = await WebAssembly.instantiateStreaming(
+//     fetch(quorumWasmUrl),
+//     go.importObject
+//   )
+//   go.run(r.instance)
+// }
+
 const init = async () => {
   const go = new Go()
-  const r = await WebAssembly.instantiateStreaming(
-    fetch(quorumWasmUrl),
-    go.importObject
-  )
-  go.run(r.instance)
+  const response = await fetch(quorumWasmUrl)
+  const buffer = await response.arrayBuffer()
+  const obj = await WebAssembly.instantiate(buffer, go.importObject)
+  go.run(obj.instance)
 }
 
 init()
@@ -21,10 +29,10 @@ export async function getNodeInfo(): Promise<any> {
   return res
 }
 
-// export async function getGroups(): Promise<any> {
-//   const res: Promise<any> = GetGroups()
-//   return res
-// }
+export async function getGroups(): Promise<any> {
+  const res: Promise<any> = GetGroups()
+  return res
+}
 
 export async function getGroupContent(...p: any): Promise<any> {
   return await GetContent(p)

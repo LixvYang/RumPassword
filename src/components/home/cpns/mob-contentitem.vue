@@ -33,6 +33,7 @@ import { ElMessage } from 'element-plus'
 import { delGroupContent } from '@/service/content/delcontent'
 import { useStore } from '@/store'
 import { getGroupContent } from '@/service/content/getcontent'
+import { RumLoading } from '@/global/loading'
 
 export default defineComponent({
   props: {
@@ -84,11 +85,6 @@ export default defineComponent({
           }
         })
         .then(() => {
-          console.log('delTrxId ' + delTrxId)
-
-          console.log(
-            delTrxId + ' ' + selectedGroupid.value + ' ' + delContentItemName
-          )
           delGroupContent(delTrxId, selectedGroupid.value, delContentItemName)
           setTimeout(() => {
             store.dispatch(
@@ -97,6 +93,7 @@ export default defineComponent({
             )
           }, 20000)
         })
+      RumLoading(true, '数据正在上链...')
     }
 
     return {
