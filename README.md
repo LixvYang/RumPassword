@@ -30,8 +30,9 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # TODO
-- [ ] Complete Bootstraps 
-- [ ] Update Mob view transsition
+- [x] Complete Bootstraps 
+- [x] Update Mob view transsition
 - [ ] Resize Mob view ADD Button
 - [ ] Add stop node run function
 - [ ] Add Content Loading 
+- [ ] Add Delete content Loading

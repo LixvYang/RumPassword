@@ -68,6 +68,28 @@ export default defineComponent({
       emit('changeContentItem', changeContentItemName)
     }
 
+    // const delContentItem = async (
+    //   delContentItemContent: string,
+    //   delContentItemName: string
+    // ) => {
+    //   const selectedGroupid = computed(() => store.state.main.groupId)
+    //   let delTrxId: string | undefined = ''
+    //   const groupContent = await getGroupContent(selectedGroupid.value)
+    //   for (let i = groupContent.data.length - 1; i >= 0; i--) {
+    //     if (groupContent.data[i].Content?.content == delContentItemContent) {
+    //       delTrxId = groupContent.data[i].TrxId
+    //     }
+    //   }
+    //   delGroupContent(delTrxId, selectedGroupid.value, delContentItemName)
+    //   setTimeout(() => {
+    //     store.dispatch(
+    //       'main/handleGroupIdAction',
+    //       selectedGroupid.value.toString()
+    //     )
+    //   }, 20000)
+    //   RumLoading(true, '数据正在上链..., 请稍候')
+    // }
+
     const delContentItem = (
       delContentItemContent: string,
       delContentItemName: string
@@ -84,16 +106,20 @@ export default defineComponent({
             }
           }
         })
-        .then(() => {
+        .then((groupContent) => {
           delGroupContent(delTrxId, selectedGroupid.value, delContentItemName)
           setTimeout(() => {
-            store.dispatch(
-              'main/handleGroupIdAction',
-              selectedGroupid.value.toString()
-            )
+            store.commit('main/changeNewGroupContent', groupContent)
+            console.log('main/changeNewGroupContent, groupContent')
           }, 20000)
+          // setTimeout(() => {
+          //   store.dispatch(
+          //     'main/handleGroupIdAction',
+          //     selectedGroupid.value.toString()
+          //   )
+          // }, 20000)
         })
-      RumLoading(true, '数据正在上链...')
+      RumLoading(true, '数据正在上链..., 请稍候')
     }
 
     return {
