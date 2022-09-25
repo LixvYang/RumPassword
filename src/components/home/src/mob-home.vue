@@ -244,10 +244,20 @@ export default defineComponent({
       cancelContenteForm()
     }
 
+    // const onClick = () => {
+    //   drawerRef.value?.close()
+    //   if (contentForm.content == '' || contentForm.name == '') {
+    //     ElMessage.error('不可以为空')
+    //     return
+    //   }
+
+      
+    // }
+
     const onClick = () => {
       drawerRef.value?.close()
       if (contentForm.content == '' || contentForm.name == '') {
-        alert('不可以为空')
+        ElMessage.error('不可以为空')
         return
       }
 
